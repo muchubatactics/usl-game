@@ -63,3 +63,102 @@ form input {
   padding: 5px;
   font-family: 'PlayFair Display', serif;
 }
+
+/*
+* game
+*/
+
+.game {
+  max-width: 1500px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.game .top {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  justify-items: center;
+  font-family: 'PlayFair Display';
+  margin-bottom: 20px;
+}
+
+.game .top .value {
+  height: 5rem;
+  width: 5rem;
+  background-color: orange;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 2rem;
+}
+
+.game .score, .game .level {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.game .progress-bars-div {
+  min-width: 600px;
+}
+
+.game .level-progress, .game .score-progress {
+  height: 2rem;
+  background-color: orange;
+  width: 100%;
+}
+
+.game main {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  font-family: 'PlayFair Display';
+  margin-bottom: 20px;
+}
+
+.game .badges div:nth-child(1) {
+  text-align: center;
+}
+
+.game .badges div:nth-child(2) {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.game .badges .award-icons div {
+  height: 50px;
+  width: 50px;
+  background-color: brown;
+  margin: 10px;
+}
+
+.game main .gif {
+  background-color: black;
+  height: 500px;
+}
+
+.game .bottom {
+  font-family: 'PlayFair Display';
+}
+
+.game .bottom > div:nth-child(1) {
+  text-align: center;
+}
+
+.game .bottom > div:nth-child(2) {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  justify-items: center;
+  column-gap: 5px;
+}
+
+.game .bottom div div {
+  background-color: bisque;
+  height: 2rem;
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+  box-sizing: border-box;
+}
