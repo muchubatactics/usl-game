@@ -8,3 +8,173 @@ document.querySelector(".intro-page form").addEventListener("submit", (event) =>
   document.querySelector(".intro-page").setAttribute("hidden", "hidden");
   document.querySelector(".game").removeAttribute("hidden");
 });
+
+const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+let levels = {
+  level1: {
+    // gif: [],
+    num: 1,
+    letter: [0, 1, 2, 3, 4, 5],
+    done: []
+  },
+  level2: {
+    // gif: [],
+    num: 2,
+    letter: [6, 7, 8, 9, 10],
+    done: []
+  },
+  level3: {
+    // gif: [],
+    num: 3,
+    letter: [11, 12, 13, 14, 15],
+    done: []
+  },
+  level4: {
+    // gif: [],
+    num: 4,
+    letter: [16, 17, 18, 19, 20],
+    done: []
+  },
+  level5: {
+    // gif: [],
+    num: 5,
+    letter: [21, 22, 23, 24, 25],
+    done: []
+  },
+};
+
+let state = {
+  level: 0,
+  levelRef: null,
+  clicks: 0,
+  passed: 0,
+  score: 0,
+};
+
+const levelNumDiv = document.querySelector(".game .top .level-div .value div:nth-child(2)");
+const scoreNumDiv = document.querySelector(".game .top .score-div .value div:nth-child(2)");
+const letterParentDiv = document.querySelector(".bottom .letters");
+const vidDiv = document.querySelector(".game .gif");
+const progressbarParent = document.querySelector(".game .level-progress");
+const scorebarParent = document.querySelector(".game .score-progress");
+
+
+// puts the letters and the level number and registers event listeners
+function loadLevel(level) {
+  state.level = level.num;
+  state.levelRef = level;
+  state.clicks = 0;
+  state.passed = 0;
+
+  removeAllChildren(letterParentDiv);
+  removeAllChildren(progressbarParent);
+  removeAllChildren(scorebarParent);
+
+  levelNumDiv.textContent = String(level.num);
+  letterParentDiv.style.cssText = `grid-template-columns: repeat(${level.letter.length}, 1fr)`;
+  progressbarParent.style.cssText = `grid-template-columns: repeat(${level.letter.length}, 1fr);`;
+  scorebarParent.style.cssText = `grid-template-columns: repeat(${level.letter.length}, 1fr);`;
+
+  for (let i = 0; i < level.letter.length; i++) {
+    let div = document.createElement('div');
+    div.setAttribute("data-val", `${alphabet[level.letter[i]]}`);
+    div.textContent = String(alphabet[level.letter[i]]);
+    letterParentDiv.appendChild(div);
+
+    progressbarParent.appendChild(document.createElement('div'));
+    scorebarParent.appendChild(document.createElement('div'));
+  }
+  loadNewGif();
+
+  putButtonEvents(letterParentDiv);
+}
+
+function removeAllChildren(div) {
+  let x = Array.from(div.childNodes);
+  for (let i = 0; i < x.length; i++) {
+    x[i].remove();
+  }
+}
+
+function putButtonEvents(parent) {
+  let x = Array.from(parent.childNodes);
+  for (let i = 0; i < x.length; i++) {
+    x[i].addEventListener("click", () => {
+      state.clicks++;
+      console.log(state);
+      if (x[i].textContent == vidDiv.getAttribute("data-val")) state.passed++;
+      else runFailAnimation(x[i]);
+      updateScore();
+      updateProgressBars();
+      if (state.clicks == state.levelRef.letter.length) endLevel();
+      else loadNewGif();
+    });
+  }
+}
+
+
+/**
+ * 
+ * find new algorithm for randomizing
+ */
+function loadNewGif() {
+  console.log("entered func");
+  console.log(state.levelRef.done)
+
+  let x = state.levelRef.letter.length - 1;
+  let num = state.levelRef.letter[x] - Math.round(Math.random() * x);
+  while (state.levelRef.done.includes(num)) {
+    num = state.levelRef.letter[x] - Math.round(Math.random() * x);
+  }
+  console.log("done with loop");
+  state.levelRef.done.push(num);
+  // vidDiv.querySelector('video').setAttribute("src", `./assets/gifs/${alphabet[num]}.webp`);
+  // vidDiv.setAttribute("data-val", `${alphabet[num]}`);
+
+  vidDiv.querySelector('img').setAttribute("src", `./assets/gifs/${alphabet[num]}.webp`);
+  vidDiv.setAttribute("data-val", `${alphabet[num]}`);
+}
+
+function updateScore() {
+  let percent = Math.round((state.passed * 100) / state.levelRef.letter.length);
+  scoreNumDiv.innerHTML = `${percent} <span class="small">%</span>`;
+}
+
+function runFailAnimation(div) {
+  div.classList.add("fail-animation");
+  setTimeout(() => {
+    div.classList.remove("fail-animation");
+  }, 500);
+  let letter = vidDiv.getAttribute("data-val");
+  let temp = document.querySelector(`.bottom .letters div[data-val='${letter}']`);
+  temp.classList.add("correct-animation");
+  setTimeout(() => {
+    temp.classList.remove("correct-animation");
+  }, 500);
+}
+
+function updateProgressBars() {
+  progressbarParent.querySelector(`div:nth-child(${state.clicks})`).style.cssText = "background-color: orange";
+  if (state.passed) { 
+    scorebarParent.querySelector(`div:nth-child(${state.passed})`).style.cssText = "background-color: red";
+    let percent = Math.round((state.passed * 100) / state.levelRef.letter.length);
+    if (percent >= 40 && percent < 75 ) {
+      scorebarParent.style.cssText += "border: 1px solid orange";
+      for (let i = 0; i < state.passed; i++) {
+        scorebarParent.childNodes[i].style.cssText += "background-color: orange";
+      }
+    } else if (percent >= 75) {
+      scorebarParent.style.cssText += "border: 1px solid green;";
+      for (let i = 0; i < state.passed; i++) {
+        scorebarParent.childNodes[i].style.cssText += "background-color: green";
+      }
+    }
+  }
+}
+
+function endLevel() {
+  
+}
+
+loadLevel(levels.level1);

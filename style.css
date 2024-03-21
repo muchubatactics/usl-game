@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+
 body {
   height: 100vh;
   margin: 0px;
   padding: 0px;
+  overflow-y: hidden;
+  user-select: none;
+}
+
+body > img {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+
 }
 
 :root {
@@ -13,20 +23,27 @@ body {
 .container {
   display: flex;
   justify-content: center;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
 }
  /*
  intro page
  */
 
 .intro-page {
-  padding-top: 2rem;
-  max-width: 1500px;
+  padding-top: 30vh;
+  min-width: 620px;
+  max-width: 55vw;
 }
 
 .heading {
   display: grid;
-  grid-template-columns: 1fr 6fr;
+  /* grid-template-columns: 1fr 6fr; */
   align-items: center;
+  color: white;
 }
 
 .heading > .title {
@@ -50,10 +67,18 @@ main form {
 
 form button {
   grid-area: 2 / 1 / 3 / 3;
+  background-color: rgb(68, 68, 68);
+  color: white;
+  border: 0px;
+}
+
+form button:hover {
+  background-color: grey;
 }
 
 form label span {
   display: block;
+  color: white;
 }
 
 form input {
@@ -62,6 +87,9 @@ form input {
   font-size: 1.5rem;
   padding: 5px;
   font-family: 'PlayFair Display', serif;
+  background-color: rgb(68, 68, 68);
+  border: 0px;
+  color: white;
 }
 
 /*
@@ -69,55 +97,97 @@ form input {
 */
 
 .game {
-  max-width: 1500px;
+  /* max-width: 1500px; */
   padding: 10px;
   box-sizing: border-box;
+  padding-top: 8vh;
 }
 
 .game .top {
-  display: grid;
-  grid-template-columns: 200px 1fr 200px;
-  justify-items: center;
+  display: flex;
   font-family: 'PlayFair Display';
-  margin-bottom: 20px;
 }
 
 .game .top .value {
-  height: 5rem;
-  width: 5rem;
+  height: 6rem;
+  width: 6rem;
   background-color: orange;
   border-radius: 50%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: 'Inter', sans-serif;
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 .game .score, .game .level {
   text-align: center;
-  margin-bottom: 10px;
+  font-size: 0.7rem;
+  font-family: 'PlayFair Display';
 }
 
 .game .progress-bars-div {
   min-width: 600px;
+  width: 100%;
+  color: white;
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 30px 0px;
+}
+
+.game .progress-bars-div div:nth-child(2n - 1) {
+  text-align: center;
 }
 
 .game .level-progress, .game .score-progress {
-  height: 2rem;
-  background-color: orange;
+  height: 1rem;
   width: 100%;
+  border: 1px solid orange;
+  box-sizing: border-box;
 }
 
-.game main {
+.game .level-progress {
   display: grid;
-  grid-template-columns: 200px 1fr 200px;
+}
+
+.game .level-div {
+  position: absolute;
+  left: 16.5%;
+  top: 10%;
+}
+
+.game .score-div {
+  position: absolute;
+  right: 7%;
+  top: 7%;
+}
+
+.game .score-progress {
+  border: 1px solid red;
+  display: grid;
+}
+
+
+.game main {
+  /* display: grid; */
+  /* grid-template-columns: 200px 1fr 200px; */
   font-family: 'PlayFair Display';
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.game .badges {
+  position: absolute;
+  left: 8%;
+  top: 30%;
+  max-width: 230px;
 }
 
 .game .badges div:nth-child(1) {
   text-align: center;
+  color: white;
 }
 
 .game .badges div:nth-child(2) {
@@ -127,15 +197,17 @@ form input {
 }
 
 .game .badges .award-icons div {
-  height: 50px;
-  width: 50px;
-  background-color: brown;
+  height: 80px;
+  width: 80px;
   margin: 10px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .game main .gif {
   background-color: black;
-  height: 500px;
+  height: 400px;
 }
 
 .game .bottom {
@@ -144,12 +216,12 @@ form input {
 
 .game .bottom > div:nth-child(1) {
   text-align: center;
+  color: white;
 }
 
 .game .bottom > div:nth-child(2) {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
   justify-items: center;
   column-gap: 5px;
 }
@@ -161,4 +233,60 @@ form input {
   text-align: center;
   padding-top: 5px;
   box-sizing: border-box;
+}
+
+.game .gif {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game .gif img {
+  max-height: 400px;
+  width: auto;
+}
+
+.fail-animation {
+  box-sizing: border-box;
+  border: 2px solid red;
+  animation: fail 0.5s ease 0s infinite;
+}
+
+.correct-animation {
+  box-sizing: border-box;
+  border: 2px solid green;
+  animation: show-correct 0.5s ease 0s infinite;
+}
+
+@keyframes fail {
+  0% {
+    transform: translateX(2px);
+  }
+
+  50% {
+    transform: translateX(-2px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes show-correct {
+  0% {
+    transform: translateY(2px);
+  }
+
+  50% {
+    transform: translateY(-2px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.small {
+  position: absolute;
+  font-size: 0.8rem;
 }
