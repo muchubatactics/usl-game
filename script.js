@@ -52,12 +52,21 @@ let state = {
   score: 0,
 };
 
+let player = {
+  name: "",
+  age: 0,
+  badges: [],
+  scores: [[], [], [], [], [], []]
+}
+
 const levelNumDiv = document.querySelector(".game .top .level-div .value div:nth-child(2)");
 const scoreNumDiv = document.querySelector(".game .top .score-div .value div:nth-child(2)");
 const letterParentDiv = document.querySelector(".bottom .letters");
 const vidDiv = document.querySelector(".game .gif");
 const progressbarParent = document.querySelector(".game .level-progress");
 const scorebarParent = document.querySelector(".game .score-progress");
+const endModal = document.querySelector("dialog");
+const awardsDiv = document.querySelector("main .badges .award-icons");
 
 
 // puts the letters and the level number and registers event listeners
@@ -66,6 +75,8 @@ function loadLevel(level) {
   state.levelRef = level;
   state.clicks = 0;
   state.passed = 0;
+  state.score = 0;
+  state.levelRef.done = [];
 
   removeAllChildren(letterParentDiv);
   removeAllChildren(progressbarParent);
@@ -75,6 +86,8 @@ function loadLevel(level) {
   letterParentDiv.style.cssText = `grid-template-columns: repeat(${level.letter.length}, 1fr)`;
   progressbarParent.style.cssText = `grid-template-columns: repeat(${level.letter.length}, 1fr);`;
   scorebarParent.style.cssText = `grid-template-columns: repeat(${level.letter.length}, 1fr);`;
+
+  updateScore();
 
   for (let i = 0; i < level.letter.length; i++) {
     let div = document.createElement('div');
@@ -102,7 +115,6 @@ function putButtonEvents(parent) {
   for (let i = 0; i < x.length; i++) {
     x[i].addEventListener("click", () => {
       state.clicks++;
-      console.log(state);
       if (x[i].textContent == vidDiv.getAttribute("data-val")) state.passed++;
       else runFailAnimation(x[i]);
       updateScore();
@@ -119,15 +131,12 @@ function putButtonEvents(parent) {
  * find new algorithm for randomizing
  */
 function loadNewGif() {
-  console.log("entered func");
-  console.log(state.levelRef.done)
 
   let x = state.levelRef.letter.length - 1;
   let num = state.levelRef.letter[x] - Math.round(Math.random() * x);
   while (state.levelRef.done.includes(num)) {
     num = state.levelRef.letter[x] - Math.round(Math.random() * x);
   }
-  console.log("done with loop");
   state.levelRef.done.push(num);
   // vidDiv.querySelector('video').setAttribute("src", `./assets/gifs/${alphabet[num]}.webp`);
   // vidDiv.setAttribute("data-val", `${alphabet[num]}`);
@@ -137,8 +146,8 @@ function loadNewGif() {
 }
 
 function updateScore() {
-  let percent = Math.round((state.passed * 100) / state.levelRef.letter.length);
-  scoreNumDiv.innerHTML = `${percent} <span class="small">%</span>`;
+  state.score = Math.round((state.passed * 100) / state.levelRef.letter.length);
+  scoreNumDiv.innerHTML = `${state.score} <span class="small">%</span>`;
 }
 
 function runFailAnimation(div) {
@@ -158,13 +167,12 @@ function updateProgressBars() {
   progressbarParent.querySelector(`div:nth-child(${state.clicks})`).style.cssText = "background-color: orange";
   if (state.passed) { 
     scorebarParent.querySelector(`div:nth-child(${state.passed})`).style.cssText = "background-color: red";
-    let percent = Math.round((state.passed * 100) / state.levelRef.letter.length);
-    if (percent >= 40 && percent < 75 ) {
+    if (state.score>= 40 && state.score < 75 ) {
       scorebarParent.style.cssText += "border: 1px solid orange";
       for (let i = 0; i < state.passed; i++) {
         scorebarParent.childNodes[i].style.cssText += "background-color: orange";
       }
-    } else if (percent >= 75) {
+    } else if (state.score >= 75) {
       scorebarParent.style.cssText += "border: 1px solid green;";
       for (let i = 0; i < state.passed; i++) {
         scorebarParent.childNodes[i].style.cssText += "background-color: green";
@@ -174,7 +182,61 @@ function updateProgressBars() {
 }
 
 function endLevel() {
+  console.log(player.badges, state.level);
+
+  player.scores[state.level - 1].push(state.score);
+
+  if (state.score >= 75) endModal.querySelector("h1").textContent = "Yeyy! You Win!";
+  else  endModal.querySelector("h1").textContent = "Noo! You Lose!";
+  endModal.querySelector(".score > h2").textContent = `You got ${state.score}%`;
+
+  if (!player.badges.includes(state.level)) {
+    console.log("hahaha");
+    if (state.score >= 75) {
+      endModal.querySelector(".award").removeAttribute("hidden");
+      endModal.querySelector(".award > img").setAttribute("src", `./assets/badge${state.level}.png`);
+      player.badges.push(state.level);
+
+      let div = document.createElement("div");
+      div.style.cssText = `background-image: url(./assets/badge${state.level}.png)`;
+      awardsDiv.appendChild(div);
+    }
+  } else endModal.querySelector(".award").setAttribute("hidden", "hidden");
+
+  if (state.score >= 75 && state.level < 5) {
+    endModal.querySelector(".btns > .next").removeAttribute("disabled");
+  } else endModal.querySelector(".btns > .next").setAttribute("disabled", "true");
   
+  endModal.querySelector(".again").onclick = function() {
+    loadlevelnum(state.level);
+    endModal.close();
+  }
+
+  endModal.querySelector(".next").onclick = function() {
+    loadlevelnum(state.level + 1);
+    endModal.close();
+  }
+  endModal.showModal();
+}
+
+function loadlevelnum(num) {
+  switch (num) {
+    case 1:
+      loadLevel(levels.level1)
+      break;
+    case 2:
+      loadLevel(levels.level2)
+      break;
+    case 3:
+      loadLevel(levels.level3)
+      break;
+    case 4:
+      loadLevel(levels.level4)
+      break;
+    case 5:
+      loadLevel(levels.level5)
+      break;
+  }
 }
 
 loadLevel(levels.level1);

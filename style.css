@@ -290,3 +290,22 @@ form input {
   position: absolute;
   font-size: 0.8rem;
 }
+
+/*
+  dialog
+*/
+
+dialog {
+  padding: 50px;
+  border-radius: 25px;
+}
+
+dialog .award img {
+  height: 300px;
+  width: auto;
+}
+
+
+dialog::backdrop {
+  filter: blur(10px);
+}
