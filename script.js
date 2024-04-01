@@ -165,6 +165,7 @@ function runFailAnimation(div) {
 
 function updateProgressBars() {
   progressbarParent.querySelector(`div:nth-child(${state.clicks})`).style.cssText = "background-color: orange";
+  progressbarParent.querySelector(`div:nth-child(${state.clicks})`).classList.add('move');
   if (state.passed) { 
     scorebarParent.querySelector(`div:nth-child(${state.passed})`).style.cssText = "background-color: red";
     if (state.score>= 40 && state.score < 75 ) {
@@ -178,6 +179,7 @@ function updateProgressBars() {
         scorebarParent.childNodes[i].style.cssText += "background-color: green";
       }
     }
+    scorebarParent.querySelector(`div:nth-child(${state.passed})`).classList.add('move');
   }
 }
 

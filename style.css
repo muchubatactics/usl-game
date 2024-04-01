@@ -109,8 +109,8 @@ form input {
 }
 
 .game .top .value {
-  height: 6rem;
-  width: 6rem;
+  height: 7rem;
+  width: 7rem;
   background-color: orange;
   border-radius: 50%;
   display: flex;
@@ -149,20 +149,35 @@ form input {
   box-sizing: border-box;
 }
 
+.move {
+  animation: move 1s ease  1  ;
+}
+
+@keyframes move {
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
+  
+}
+
 .game .level-progress {
   display: grid;
 }
 
 .game .level-div {
   position: absolute;
-  left: 16.5%;
-  top: 10%;
+  left: 16%;
+  top: 7%;
 }
 
 .game .score-div {
   position: absolute;
-  right: 7%;
-  top: 7%;
+  right: 6.5%;
+  top: 6.5%;
 }
 
 .game .score-progress {
