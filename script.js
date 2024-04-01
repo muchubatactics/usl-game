@@ -9,6 +9,17 @@ document.querySelector(".intro-page form").addEventListener("submit", (event) =>
   document.querySelector(".game").removeAttribute("hidden");
 });
 
+const formButton = document.querySelector(".intro-page form button");
+formButton.addEventListener("mouseover", (event) => {
+  formButton.classList.remove('mouseout');
+  formButton.classList.add('mousein');
+});
+formButton.addEventListener("mouseout", (event) => {
+  formButton.classList.remove('mousein');
+  formButton.classList.add('mouseout');
+  console.log("hehe");
+})
+
 const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 let levels = {
