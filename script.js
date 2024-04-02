@@ -228,20 +228,24 @@ function endLevel() {
   if (state.score >= 75 && state.level < 5) {
     endModal.querySelector(".btns > .next").removeAttribute("disabled");
   } else endModal.querySelector(".btns > .next").setAttribute("disabled", "true");
+
+  endModal.addEventListener('close', handleClose);
   
   endModal.querySelector(".again").onclick = function() {
-    // loadlevelnum(state.level);
+    endModal.removeEventListener('close', handleClose);
+    loadlevelnum(state.level);
     endModal.close();
   }
 
   endModal.querySelector(".next").onclick = function() {
-    // loadlevelnum(state.level + 1);
+    endModal.removeEventListener('close', handleClose);
+    loadlevelnum(state.level + 1);
     endModal.close();
   }
   endModal.showModal();
 }
 
-endModal.addEventListener('close', () => {
+function handleClose() {
   if (state.level == 5) {
     loadlevelnum(state.level);
   } else if (state.score >= 75) {
@@ -249,7 +253,7 @@ endModal.addEventListener('close', () => {
   } else {
     loadlevelnum(state.level);
   }
-});
+}
 
 // endModal.showModal();
 
