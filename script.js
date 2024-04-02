@@ -130,6 +130,7 @@ function putButtonEvents(parent) {
       else runFailAnimation(x[i]);
       updateScore();
       updateProgressBars();
+      vidDiv.querySelector('img').setAttribute("src", '');
       if (state.clicks == state.levelRef.letter.length) endLevel();
       else loadNewGif();
     });
@@ -140,6 +141,8 @@ function putButtonEvents(parent) {
 /**
  * 
  * find new algorithm for randomizing
+ * 
+ * no need now
  */
 function loadNewGif() {
 
