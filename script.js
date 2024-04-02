@@ -80,7 +80,6 @@ const endModal = document.querySelector("dialog");
 const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 
-
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
   state.level = level.num;
@@ -196,16 +195,17 @@ function updateProgressBars() {
 }
 
 function endLevel() {
-  console.log(player.badges, state.level);
 
   player.scores[state.level - 1].push(state.score);
 
-  if (state.score >= 75) endModal.querySelector("h1").textContent = "Yeyy! You Win!";
-  else  endModal.querySelector("h1").textContent = "Noo! You Lose!";
+  if (state.score >= 75) {
+    endModal.querySelector("h1").textContent = "Yeyy! You Win!";
+  } else  {
+    endModal.querySelector("h1").textContent = "Noo! You Lose!";
+  }
   endModal.querySelector(".score > h2").textContent = `You got ${state.score}%`;
 
   if (!player.badges.includes(state.level)) {
-    console.log("hahaha");
     if (state.score >= 75) {
       endModal.querySelector(".award").removeAttribute("hidden");
       endModal.querySelector(".award > img").setAttribute("src", `./assets/badge${state.level}.png`);
@@ -227,16 +227,28 @@ function endLevel() {
   } else endModal.querySelector(".btns > .next").setAttribute("disabled", "true");
   
   endModal.querySelector(".again").onclick = function() {
-    loadlevelnum(state.level);
+    // loadlevelnum(state.level);
     endModal.close();
   }
 
   endModal.querySelector(".next").onclick = function() {
-    loadlevelnum(state.level + 1);
+    // loadlevelnum(state.level + 1);
     endModal.close();
   }
   endModal.showModal();
 }
+
+endModal.addEventListener('close', () => {
+  if (state.level == 5) {
+    loadlevelnum(state.level);
+  } else if (state.score >= 75) {
+    loadlevelnum(state.level + 1);
+  } else {
+    loadlevelnum(state.level);
+  }
+});
+
+// endModal.showModal();
 
 function loadlevelnum(num) {
   switch (num) {

@@ -402,16 +402,63 @@ form input {
 */
 
 dialog {
-  padding: 50px;
+  padding:  50px 100px;
   border-radius: 25px;
+  border: 5px solid #5A46DE;
+  background-color: #59F1EA;
+  /* display: grid; */
+}
+
+dialog h1 {
+  font-family: 'Bevan';
+  text-align: center;
+  color: #5A46DE;
+  margin-top: 0px;
+}
+
+dialog h2 {
+  font-family: 'Bevan';
+  margin-top: -20px;
+  text-align: center;
+  color: #E12E8A;
+}
+
+dialog h3 {
+  font-family: 'BioRhyme Expanded';
+  text-align: center;
+  margin-top: -20px;
+  font-size: 0.9rem;
+}
+
+dialog .award {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 dialog .award img {
   height: 300px;
   width: auto;
+  align-self: center;
+  justify-self: center;
+}
+
+dialog button {
+  background-color: #F6E013;
+  border: 0px;
+  padding: 20px;
+  font-family: 'Bevan';
+  font-size: 1.5rem;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+dialog button:hover {
+  transform: scale(0.95);
 }
 
 
 dialog::backdrop {
-  filter: blur(10px);
+  background-color: rgba(20, 57, 138, 0.25);
+  backdrop-filter: brightness(0.5);
 }
