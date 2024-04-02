@@ -46,7 +46,7 @@ body > img {
 
 .intro-page {
   padding-top: 30vh;
-  min-width: 620px;
+  /* min-width: 620px; */
   max-width: 55vw;
 }
 
@@ -61,6 +61,7 @@ body > img {
   font-family: 'Bevan', sans-serif;
   color: #F66F00;
   font-size: 2.3rem;
+  text-align: center;
 }
 
 .heading > .logo > img {
@@ -160,7 +161,6 @@ form input {
   align-items: center;
   font-family: 'Luckiest Guy', sans-serif;
   font-size: 3rem;
-  box-shadow: 5px 10px 15px #F6E013 inset;
 }
 
 .game .score, .game .level {
@@ -306,7 +306,6 @@ form input {
   justify-content: center;
   font-family: 'Holtwood One SC';
   font-size: 2rem;
-  box-shadow: 5px 5px 7px #F66F00 inset;
 }
 
 .game .bottom div div:hover {
@@ -461,4 +460,57 @@ dialog button:hover {
 dialog::backdrop {
   background-color: rgba(20, 57, 138, 0.25);
   backdrop-filter: brightness(0.5);
+}
+
+/* media queries */
+@media screen and (max-width: 1280px) {
+  :root {
+    font-size: 20px;
+  }
+
+  .heading > .title {
+    font-size: 1.9rem;
+  }
+
+  .game .top .value {
+    height: 6rem;
+    width: 6rem;
+  }
+
+  .game .progress-bars-div {
+    min-width: 500px;
+  }
+
+  .game main .gif {
+    height: 300px;
+  }
+
+  .game .gif img {
+    max-height: 300px;
+    width: auto;
+  }
+
+}
+
+@media screen and (max-width: 1024px) {
+  :root {
+    font-size: 16px;
+  }
+
+  .intro-page {
+    max-width: 55vw;
+  }
+
+  .game .progress-bars-div {
+    min-width: 450px;
+  }
+
+  .game main .gif {
+    height: 200px;
+  }
+
+  .game .gif img {
+    max-height: 200px;
+    width: auto;
+  }
 }
