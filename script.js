@@ -77,7 +77,8 @@ const vidDiv = document.querySelector(".game .gif");
 const progressbarParent = document.querySelector(".game .level-progress");
 const scorebarParent = document.querySelector(".game .score-progress");
 const endModal = document.querySelector("dialog");
-const awardsDiv = document.querySelector("main .badges .award-icons");
+const awardsDivOne = document.querySelector("main .badges.one .award-icons");
+const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 
 
 // puts the letters and the level number and registers event listeners
@@ -165,13 +166,13 @@ function runFailAnimation(div) {
   div.classList.add("fail-animation");
   setTimeout(() => {
     div.classList.remove("fail-animation");
-  }, 500);
+  }, 1000);
   let letter = vidDiv.getAttribute("data-val");
   let temp = document.querySelector(`.bottom .letters div[data-val='${letter}']`);
   temp.classList.add("correct-animation");
   setTimeout(() => {
     temp.classList.remove("correct-animation");
-  }, 500);
+  }, 1000);
 }
 
 function updateProgressBars() {
@@ -212,7 +213,12 @@ function endLevel() {
 
       let div = document.createElement("div");
       div.style.cssText = `background-image: url(./assets/badge${state.level}.png)`;
-      awardsDiv.appendChild(div);
+      // awardsDiv.appendChild(div);
+      if (state.level > 3) {
+        awardsDivTwo.appendChild(div);
+      } else {
+        awardsDivOne.appendChild(div);
+      }
     }
   } else endModal.querySelector(".award").setAttribute("hidden", "hidden");
 

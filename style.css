@@ -145,26 +145,29 @@ form input {
 
 .game .top {
   display: flex;
-  font-family: 'PlayFair Display';
+  font-family: 'BioRhyme Expanded';
+  font-size: 0.8rem;
 }
 
 .game .top .value {
   height: 7rem;
   width: 7rem;
-  background-color: orange;
+  background-color: #F66F00;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 2.5rem;
+  font-family: 'Luckiest Guy', sans-serif;
+  font-size: 3rem;
+  box-shadow: 5px 10px 15px #F6E013 inset;
 }
 
 .game .score, .game .level {
   text-align: center;
-  font-size: 0.7rem;
-  font-family: 'PlayFair Display';
+  font-size: 0.6rem;
+  font-family: 'BioRhyme Expanded';
+  margin-bottom: 10px;
 }
 
 .game .progress-bars-div {
@@ -183,10 +186,11 @@ form input {
 }
 
 .game .level-progress, .game .score-progress {
-  height: 1rem;
+  height: 0.6rem;
   width: 100%;
   border: 1px solid orange;
   box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 .move {
@@ -233,16 +237,24 @@ form input {
   margin-bottom: 40px;
 }
 
-.game .badges {
+.game .badges.one {
   position: absolute;
-  left: 8%;
+  left: 9%;
   top: 30%;
   max-width: 230px;
 }
 
-.game .badges div:nth-child(1) {
+.game .badges.two {
+  position: absolute;
+  right: 9%;
+  top: 30%;
+  max-width: 230px;
+}
+
+.game .badges > div:nth-child(1) {
   text-align: center;
   color: white;
+  display: none;
 }
 
 .game .badges div:nth-child(2) {
@@ -252,8 +264,8 @@ form input {
 }
 
 .game .badges .award-icons div {
-  height: 80px;
-  width: 80px;
+  height: 150px;
+  width: 150px;
   margin: 10px;
   background-position: center center;
   background-size: cover;
@@ -263,31 +275,42 @@ form input {
 .game main .gif {
   background-color: black;
   height: 400px;
+  margin-top: -20px;
 }
 
 .game .bottom {
-  font-family: 'PlayFair Display';
+  font-family: 'Stint Ultra Expanded';
 }
 
 .game .bottom > div:nth-child(1) {
   text-align: center;
   color: white;
+  margin-bottom: 10px;
 }
 
 .game .bottom > div:nth-child(2) {
   margin-top: 10px;
   display: grid;
   justify-items: center;
-  column-gap: 5px;
+  column-gap: 10px;
 }
 
 .game .bottom div div {
-  background-color: bisque;
-  height: 2rem;
+  background-color: #F6E013;
+  height: 3rem;
   width: 100%;
-  text-align: center;
-  padding-top: 5px;
   box-sizing: border-box;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Holtwood One SC';
+  font-size: 2rem;
+  box-shadow: 5px 5px 7px #F66F00 inset;
+}
+
+.game .bottom div div:hover {
+  transform: scale(0.95);
 }
 
 .game .gif {
@@ -303,41 +326,69 @@ form input {
 
 .fail-animation {
   box-sizing: border-box;
-  border: 2px solid red;
-  animation: fail 0.5s ease 0s infinite;
+  background-color: red;
+  animation: fail 1s ease 0s infinite;
 }
 
 .correct-animation {
   box-sizing: border-box;
-  border: 2px solid green;
-  animation: show-correct 0.5s ease 0s infinite;
+  background-color: green;
+  animation: show-correct 1s ease 0s infinite;
 }
 
 @keyframes fail {
   0% {
-    transform: translateX(2px);
+    transform: translateX(0px);
+    background-color: red;
+  }
+
+  25% {
+    transform: translateX(-5px);
+    background-color: red;
   }
 
   50% {
-    transform: translateX(-2px);
+    transform: translateX(5px);
+    background-color: red;
+
+  }
+
+  75% {
+    transform: translateX(-5px);
+    background-color: red;
+
   }
 
   100% {
     transform: translateX(0px);
+    background-color:#F6E013;
   }
 }
 
 @keyframes show-correct {
   0% {
-    transform: translateY(2px);
+    transform: translateY(0px);
+    background-color: limegreen;
+  }
+
+  25% {
+    transform: translateY(-5px);
+    background-color: limegreen;
   }
 
   50% {
-    transform: translateY(-2px);
+    transform: translateY(5px);
+    background-color: limegreen;
+  }
+
+  75% {
+    transform: translateY(-5px);
+    background-color: limegreen;
   }
 
   100% {
     transform: translateY(0px);
+    /* background-color: #F6E013; */
   }
 }
 
