@@ -36,6 +36,10 @@ async function createPlayer(player) {
       );
     }
 
+    // store user's score as a JSON string since it's a nested
+    // array which firestore doesn't support
+    player.score && (player.score = JSON.stringify(player.score));
+
     const createdPlayer = await addDoc(playersCollection, player);
 
     return {
@@ -67,6 +71,10 @@ async function updatePlayer(id, player) {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) throw new Error("Player not found");
+
+    // store user's score as a JSON string since it's a nested
+    // array which firestore doesn't support
+    player.score && (player.score = JSON.stringify(player.score));
 
     // if it exists, update the player
     await updateDoc(querySnapshot.docs[0].ref, player);
