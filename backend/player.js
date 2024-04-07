@@ -18,7 +18,7 @@ const playersCollection = collection(db, "players");
  * @throws if player with similar name exists
  *
  * @example
- * createPlayer({
+ * const player = await createPlayer({
  *      name: "John Doe",
  *      age: 20,
  * })
@@ -59,7 +59,7 @@ async function createPlayer(player) {
  * @returns {Promise<Record<string, any> | null>} the updated player.
  *
  * @example
- * updatePlayer("player-id", {
+ * const player = await updatePlayer("player-id", {
  *      name: "John Doe",
  *      age: 20,
  * })
@@ -68,7 +68,7 @@ async function updatePlayer(id, player) {
   try {
     // get the player with the id
     const q = query(playersCollection, where("id", "==", id));
-    const querySnapshot = await getDocs(q);
+    let querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) throw new Error("Player not found");
 
@@ -79,6 +79,8 @@ async function updatePlayer(id, player) {
     // if it exists, update the player
     await updateDoc(querySnapshot.docs[0].ref, player);
 
+    // return the updated player
+    querySnapshot = await getDocs(q);
     return {
       id: querySnapshot.docs[0].id,
       ...querySnapshot.docs[0].data(),
@@ -96,7 +98,7 @@ async function updatePlayer(id, player) {
  * @throws if player not found
  *
  * @example
- * getPlayer("player-id")
+ * const player = await getPlayer("player-id")
  */
 async function getPlayer(id) {
   try {
