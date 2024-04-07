@@ -4,3 +4,4 @@
 /assets/background2.png
 /assets/background1.png
 node_modules/
+.env
