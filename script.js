@@ -67,7 +67,7 @@ let player = {
   name: "",
   age: 0,
   badges: [],
-  scores: [[], [], [], [], [], []]
+  scores: [[], [], [], [], []]
 }
 
 const levelNumDiv = document.querySelector(".game .top .level-div .value div:nth-child(2)");
