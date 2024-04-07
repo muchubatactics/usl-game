@@ -16,10 +16,10 @@ We have two collections in the database: `players` and `sessions`. The `players`
 {
     id: string,
     name: string,
-    joinedAt: timestamp,
     badges: array,
     age: number,
-    scores: array<array<number>>, // array of arrays of integers
+    joinedAt: timestamp/Date, // UNIX timestamp since epoch or Date object but most preferably UNIX timestamp should be used since it's easier to work with
+    scores: string, // stored as JSON string that resolves to array of arrays of integers e.g. [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 }
 ```
 
@@ -35,4 +35,4 @@ We have two collections in the database: `players` and `sessions`. The `players`
 }
 ```
 
-**NOTE**: The backend expects all the data it receives to be in the format specified above.
+**NOTE**: The backend expects all the data it receives to be in the format specified above. We've not included deletion of users or sessions in the backend. We're assuming that the user will not be deleted from the database. **All data is stored in the database permanently**.
