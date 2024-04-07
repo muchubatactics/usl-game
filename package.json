@@ -1,0 +1,17 @@
+{
+  "name": "usl",
+  "version": "1.0.0",
+  "description": "game for interpreting sign language",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "muchuba-tactics-and-winterrdog",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^10.10.0"
+  }
+}
