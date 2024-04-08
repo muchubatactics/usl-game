@@ -34,6 +34,7 @@ const sessionsCollection = collection(db, "sessions");
  */
 async function createSession(session) {
   try {
+    session.loggedInAt = Date.now();
     const createdSession = await addDoc(sessionsCollection, session);
     return {
       id: createdSession.id,
@@ -75,9 +76,7 @@ async function updateSession(id, session) {
   try {
     const q = query(sessionsCollection, where("id", "==", id));
     let querySnapshot = await getDocs(q);
-
     if (querySnapshot.empty) throw new Error("Session not found");
-
     await updateDoc(querySnapshot.docs[0].ref, session);
 
     // return the updated session
