@@ -3,6 +3,8 @@ import {
   addDoc,
   collection,
   getDocs,
+  limit,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -35,6 +37,11 @@ const sessionsCollection = collection(db, "sessions");
 async function createSession(session) {
   try {
     session.loggedInAt = Date.now();
+
+    // store user's score as a JSON string since it's a nested
+    // array which firestore doesn't support
+    session.scores && (session.scores = JSON.stringify(session.scores));
+
     const createdSession = await addDoc(sessionsCollection, session);
     return {
       id: createdSession.id,
@@ -79,6 +86,10 @@ async function updateSession(id, session) {
     if (querySnapshot.empty) throw new Error("Session not found");
     await updateDoc(querySnapshot.docs[0].ref, session);
 
+    // store user's score as a JSON string since it's a nested
+    // array which firestore doesn't support
+    session.scores && (session.scores = JSON.stringify(session.scores));
+
     // return the updated session
     querySnapshot = await getDocs(q);
     return {
@@ -104,9 +115,14 @@ async function getSession(id) {
     const q = query(sessionsCollection, where("id", "==", id));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Session not found");
+    const session = querySnapshot.docs[0].data();
+
+    // parse the score from JSON string to array
+    session.scores && (session.scores = JSON.parse(session.scores));
+
     return {
       id,
-      ...querySnapshot.docs[0].data(),
+      ...session,
     };
   } catch (e) {
     console.error("Error getting session: ", e);
@@ -114,4 +130,63 @@ async function getSession(id) {
   }
 }
 
-export { createSession, updateSession, getSession };
+/**
+ * Gets the previous session for a player
+ * @param {string} playerId - the player id
+ * @returns {Promise<Record<string, any> | null>} the previous session.
+ * @throws if previous session not found
+ *
+ * @example
+ * const session = await getPreviousSession("player-id")
+ */
+async function getPreviousSession(playerId) {
+  try {
+    // get all sessions for the player
+    const q = query(
+      sessionsCollection,
+      where("playerId", "==", playerId),
+      orderBy("loggedInAt", "desc"),
+      limit(1)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) throw new Error("No previous session found");
+    return {
+      id: querySnapshot.docs[0].id,
+      ...querySnapshot.docs[0].data(),
+    };
+  } catch (e) {
+    console.error("Error getting previous session: ", e);
+    return null;
+  }
+}
+
+/**
+ * Gets all sessions for a player
+ * @param {string} playerId - the player id
+ * @returns {Promise<Record<string, any>[] | null>} the player sessions.
+ * @throws if no sessions found
+ *
+ * @example
+ * const sessions = await getPlayerSessions("player-id")
+ */
+async function getPlayerSessions(playerId) {
+  try {
+    const q = query(sessionsCollection, where("playerId", "==", playerId));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) throw new Error("No sessions found");
+    return querySnapshot.docs.map(function (doc) {
+      return { id: doc.id, ...doc.data() };
+    });
+  } catch (e) {
+    console.error("Error getting player sessions: ", e);
+    return null;
+  }
+}
+
+export {
+  createSession,
+  updateSession,
+  getSession,
+  getPreviousSession,
+  getPlayerSessions,
+};

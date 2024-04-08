@@ -38,13 +38,9 @@ async function createPlayer(player) {
 
     // set createdAt to current date as a timestamp
     player.createdAt = Date.now();
-
-    // store user's score as a JSON string since it's a nested
-    // array which firestore doesn't support
-    player.score && (player.score = JSON.stringify(player.score));
+    player.updatedAt = Date.now();
 
     const createdPlayer = await addDoc(playersCollection, player);
-
     return {
       id: createdPlayer.id,
       ...player,
@@ -71,15 +67,10 @@ async function updatePlayer(id, player) {
   try {
     const q = query(playersCollection, where("id", "==", id));
     let querySnapshot = await getDocs(q);
-
     if (querySnapshot.empty) throw new Error("Player not found");
 
     // set updatedAt to current date as a timestamp
     player.updatedAt = Date.now();
-
-    // store user's score as a JSON string since it's a nested
-    // array which firestore doesn't support
-    player.score && (player.score = JSON.stringify(player.score));
 
     await updateDoc(querySnapshot.docs[0].ref, player);
 
@@ -108,13 +99,10 @@ async function getPlayer(id) {
     const q = query(playersCollection, where("id", "==", id));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Player not found");
-    const player = querySnapshot.docs[0].data();
-
-    // parse the score from JSON string to array
-    player.score && (player.score = JSON.parse(player.score));
+    const player = querySnapshot.docs[0];
     return {
-      id: querySnapshot.docs[0].id,
-      ...player,
+      id: player.id,
+      ...player.data(),
     };
   } catch (e) {
     console.error("Error getting document: ", e);
