@@ -104,12 +104,14 @@ async function getPlayer(id) {
   try {
     const q = query(playersCollection, where("id", "==", id));
     const querySnapshot = await getDocs(q);
-
     if (querySnapshot.empty) throw new Error("Player not found");
+    const player = querySnapshot.docs[0].data();
 
+    // parse the score from JSON string to array
+    player.score && (player.score = JSON.parse(player.score));
     return {
       id: querySnapshot.docs[0].id,
-      ...querySnapshot.docs[0].data(),
+      ...player,
     };
   } catch (e) {
     console.error("Error getting document: ", e);
