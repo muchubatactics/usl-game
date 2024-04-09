@@ -317,6 +317,28 @@ function loadlevelnum(num) {
 }
 
 loadLevel(levels.level1);
+
+// call off cleanup when the user tries to leave the page
+window.addEventListener("beforeunload", function (event) {
+  event.preventDefault(); // Cancel the event
+
+  // Chrome requires returnValue to be set
+  event.returnValue = "Are you tired of playing?";
+
+  // set the player info on logout
+  // i.e. update the badges, scores and session details
+  playerBackend
+    .setInfoOnLogout()
+    .then(() => {
+      console.log("logged out");
+    })
+    .catch((e) => {
+      console.error(e);
+      this.alert("Error logging out:", e.message);
+    });
+});
+
+// //////////////////////////////////////////////////////////
 // backend code /////////////////////////////////////////////
 /*
   This is all the code that will talk to the backend
