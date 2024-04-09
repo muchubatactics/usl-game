@@ -36,8 +36,6 @@ const sessionsCollection = collection(db, "sessions");
  */
 async function createSession(session) {
   try {
-    session.loggedInAt = Date.now();
-
     // store user's score as a JSON string since it's a nested
     // array which firestore doesn't support
     session.scores && (session.scores = JSON.stringify(session.scores));
@@ -84,13 +82,13 @@ async function updateSession(id, session) {
     const q = query(sessionsCollection, where("id", "==", id));
     let querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Session not found");
-    await updateDoc(querySnapshot.docs[0].ref, session);
 
     // store user's score as a JSON string since it's a nested
     // array which firestore doesn't support
     session.scores && (session.scores = JSON.stringify(session.scores));
 
-    // return the updated session
+    await updateDoc(querySnapshot.docs[0].ref, session);
+
     querySnapshot = await getDocs(q);
     return {
       id,
@@ -150,9 +148,14 @@ async function getPreviousSession(playerId) {
     );
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("No previous session found");
+    const session = querySnapshot.docs[0].data();
+
+    // parse the score from JSON string to array
+    session.scores && (session.scores = JSON.parse(session.scores));
+
     return {
       id: querySnapshot.docs[0].id,
-      ...querySnapshot.docs[0].data(),
+      ...session,
     };
   } catch (e) {
     console.error("Error getting previous session: ", e);
@@ -175,7 +178,12 @@ async function getPlayerSessions(playerId) {
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("No sessions found");
     return querySnapshot.docs.map(function (doc) {
-      return { id: doc.id, ...doc.data() };
+      const session = doc.data();
+
+      // parse the score from JSON string to array
+      session.scores && (session.scores = JSON.parse(session.scores));
+
+      return { id: doc.id, ...session };
     });
   } catch (e) {
     console.error("Error getting player sessions: ", e);
