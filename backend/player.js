@@ -36,12 +36,10 @@ async function createPlayer(player) {
       );
     }
 
-    // store user's score as a JSON string since it's a nested
-    // array which firestore doesn't support
-    player.score && (player.score = JSON.stringify(player.score));
+    // set createdAt to current date as a timestamp
+    player.createdAt = player.updatedAt = Date.now();
 
     const createdPlayer = await addDoc(playersCollection, player);
-
     return {
       id: createdPlayer.id,
       ...player,
@@ -66,20 +64,15 @@ async function createPlayer(player) {
  */
 async function updatePlayer(id, player) {
   try {
-    // get the player with the id
     const q = query(playersCollection, where("id", "==", id));
     let querySnapshot = await getDocs(q);
-
     if (querySnapshot.empty) throw new Error("Player not found");
 
-    // store user's score as a JSON string since it's a nested
-    // array which firestore doesn't support
-    player.score && (player.score = JSON.stringify(player.score));
+    // set updatedAt to current date as a timestamp
+    player.updatedAt = Date.now();
 
-    // if it exists, update the player
     await updateDoc(querySnapshot.docs[0].ref, player);
 
-    // return the updated player
     querySnapshot = await getDocs(q);
     return {
       id: querySnapshot.docs[0].id,
@@ -104,12 +97,11 @@ async function getPlayer(id) {
   try {
     const q = query(playersCollection, where("id", "==", id));
     const querySnapshot = await getDocs(q);
-
     if (querySnapshot.empty) throw new Error("Player not found");
-
+    const player = querySnapshot.docs[0];
     return {
-      id: querySnapshot.docs[0].id,
-      ...querySnapshot.docs[0].data(),
+      id: player.id,
+      ...player.data(),
     };
   } catch (e) {
     console.error("Error getting document: ", e);

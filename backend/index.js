@@ -1,6 +1,12 @@
 // @ts-check
 import { createPlayer, updatePlayer, getPlayer } from "./player";
-import { createSession, updateSession, getSession } from "./sessions";
+import {
+  createSession,
+  updateSession,
+  getSession,
+  getPreviousSession,
+  getPlayerSessions,
+} from "./sessions";
 export {
   createSession,
   updateSession,
@@ -8,4 +14,6 @@ export {
   createPlayer,
   updatePlayer,
   getPlayer,
+  getPreviousSession,
+  getPlayerSessions,
 };
