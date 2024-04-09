@@ -37,8 +37,7 @@ async function createPlayer(player) {
     }
 
     // set createdAt to current date as a timestamp
-    player.createdAt = Date.now();
-    player.updatedAt = Date.now();
+    player.createdAt = player.updatedAt = Date.now();
 
     const createdPlayer = await addDoc(playersCollection, player);
     return {
