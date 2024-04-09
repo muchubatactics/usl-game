@@ -402,7 +402,6 @@ class GameBackend {
       };
       return await createPlayer(userToRegister);
     } catch (e) {
-      console.error(e);
       throw e;
     }
   }
@@ -423,7 +422,6 @@ class GameBackend {
       // update session id
       if (!this.currSessionId) this.currSessionId = returnedSession.id;
     } catch (e) {
-      console.error(e);
       throw e;
     }
   }
@@ -450,7 +448,6 @@ class GameBackend {
       this.currSessionId = null;
       this.loggedInAt = null;
     } catch (e) {
-      console.error(e);
       throw e;
     }
   }
