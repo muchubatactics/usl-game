@@ -278,3 +278,79 @@ function loadlevelnum(num) {
 }
 
 loadLevel(levels.level1);
+// backend code /////////////////////////////////////////////
+/*
+  This is all the code that will talk to the backend
+*/
+class GameBackend {
+  constructor() {
+    this.currSessionId = null;
+    this.loggedInAt = null;
+  }
+
+  async registerPlayer(name, age) {
+    try {
+      const userToRegister = {
+        name: name,
+        age: age,
+        badges: [],
+      };
+      return await createPlayer(userToRegister);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async setLoginInfo(returnedPlayer) {
+    if (!this.loggedInAt) this.loggedInAt = Date.now();
+
+    try {
+      const sessionStored = {
+        playerId: returnedPlayer.id,
+        durationPlayed: 0,
+        loggedInAt: this.loggedInAt,
+        loggedOutAt: 0,
+        scores: player.scores,
+      };
+      const returnedSession = await createSession(sessionStored);
+      console.log(returnedSession);
+
+      // update session id
+      if (!this.currSessionId) this.currSessionId = returnedSession.id;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async setInfoOnLogout() {
+    const updatedPlayer = {
+      badges: player.badges,
+    };
+
+    try {
+      await updatePlayer(player.id, updatedPlayer);
+
+      // update session
+      const currTime = Date.now();
+      const sessionUpdated = {
+        durationPlayed: currTime - this.loggedInAt,
+        loggedOutAt: currTime,
+        scores: player.scores,
+      };
+      const returnedSession = await updateSession(
+        this.currSessionId,
+        sessionUpdated
+      );
+      console.log(returnedSession);
+
+      // reset the session id
+      this.currSessionId = null;
+      this.loggedInAt = null;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+}
