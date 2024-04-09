@@ -2,12 +2,58 @@
  * what if, existence precedes essence?
  */
 
-document.querySelector(".intro-page form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  document.querySelector(".intro-page form").setAttribute("disabled", "disabled");
-  document.querySelector(".intro-page").setAttribute("hidden", "hidden");
-  document.querySelector(".game").removeAttribute("hidden");
-});
+import {
+  createPlayer,
+  createSession,
+  updatePlayer,
+  updateSession,
+} from "./backend";
+
+const playerBackend = new GameBackend(); // interact with the backend
+const player = {
+  id: "", // set when player is created
+  name: "",
+  age: 0,
+  badges: [],
+  scores: [[], [], [], [], []],
+};
+
+document
+  .querySelector(".intro-page form")
+  .addEventListener("submit", (event) => {
+    event.preventDefault();
+    player.name = document.getElementById("name").value;
+    player.age = Number(document.getElementById("age").value);
+
+    // create player
+    playerBackend
+      .registerPlayer(player.name, player.age)
+      .then(function (returnedPlayer) {
+        player.id = returnedPlayer.id;
+
+        // create a session
+        playerBackend
+          .setLoginInfo(returnedPlayer)
+          .then(() => {
+            console.log("logged in");
+          })
+          .catch((e) => {
+            console.error(e);
+            this.alert("Error setting session:", e.message);
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.alert("Error creating player:", e.message);
+      });
+
+    document
+      .querySelector(".intro-page form")
+      .setAttribute("disabled", "disabled");
+
+    document.querySelector(".intro-page").setAttribute("hidden", "hidden");
+    document.querySelector(".game").removeAttribute("hidden");
+  });
 
 const formButton = document.querySelector(".intro-page form button");
 formButton.addEventListener("mouseover", (event) => {
@@ -89,8 +135,6 @@ let state = {
   passed: 0,
   score: 0,
 };
-
-// const playerBackend = new GameBackend(); // interact with the backend
 
 const levelNumDiv = document.querySelector(
   ".game .top .level-div .value div:nth-child(2)"
@@ -365,7 +409,6 @@ class GameBackend {
 
   async setLoginInfo(returnedPlayer) {
     if (!this.loggedInAt) this.loggedInAt = Date.now();
-
     try {
       const sessionStored = {
         playerId: returnedPlayer.id,
@@ -386,11 +429,8 @@ class GameBackend {
   }
 
   async setInfoOnLogout() {
-    const updatedPlayer = {
-      badges: player.badges,
-    };
-
     try {
+      const updatedPlayer = { badges: player.badges };
       await updatePlayer(player.id, updatedPlayer);
 
       // update session
