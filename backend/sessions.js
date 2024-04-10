@@ -2,6 +2,7 @@
 import {
   addDoc,
   collection,
+  documentId,
   getDocs,
   limit,
   orderBy,
@@ -79,7 +80,7 @@ async function createSession(session) {
  */
 async function updateSession(id, session) {
   try {
-    const q = query(sessionsCollection, where("id", "==", id));
+    const q = query(sessionsCollection, where(documentId(), "==", id));
     let querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Session not found");
 
@@ -91,7 +92,7 @@ async function updateSession(id, session) {
 
     querySnapshot = await getDocs(q);
     return {
-      id,
+      id: querySnapshot.docs[0].id,
       ...querySnapshot.docs[0].data(),
     };
   } catch (e) {
@@ -110,7 +111,7 @@ async function updateSession(id, session) {
  */
 async function getSession(id) {
   try {
-    const q = query(sessionsCollection, where("id", "==", id));
+    const q = query(sessionsCollection, where(documentId(), "==", id));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Session not found");
     const session = querySnapshot.docs[0].data();
@@ -143,7 +144,7 @@ async function getPreviousSession(playerId) {
     const q = query(
       sessionsCollection,
       where("playerId", "==", playerId),
-      orderBy("loggedInAt", "desc"),
+      orderBy("levelStartedAt", "desc"),
       limit(1)
     );
     const querySnapshot = await getDocs(q);
