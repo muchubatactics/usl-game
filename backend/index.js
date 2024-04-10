@@ -7,6 +7,7 @@ import {
   getPreviousSession,
   getPlayerSessions,
 } from "./sessions";
+import { changeEpochToReadable } from "./utils";
 export {
   createSession,
   updateSession,
@@ -16,4 +17,5 @@ export {
   getPlayer,
   getPreviousSession,
   getPlayerSessions,
+  changeEpochToReadable,
 };
