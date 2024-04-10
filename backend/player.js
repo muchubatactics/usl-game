@@ -2,12 +2,14 @@
 import {
   addDoc,
   collection,
+  documentId,
   getDocs,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
 import db from "./database";
+import { changeEpochToReadable } from "./utils";
 
 const playersCollection = collection(db, "players");
 
@@ -37,7 +39,7 @@ async function createPlayer(player) {
     }
 
     // set createdAt to current date as a timestamp
-    player.createdAt = player.updatedAt = Date.now();
+    player.createdAt = player.updatedAt = changeEpochToReadable(Date.now());
 
     const createdPlayer = await addDoc(playersCollection, player);
     return {
@@ -64,12 +66,12 @@ async function createPlayer(player) {
  */
 async function updatePlayer(id, player) {
   try {
-    const q = query(playersCollection, where("id", "==", id));
+    const q = query(playersCollection, where(documentId(), "==", id));
     let querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Player not found");
 
     // set updatedAt to current date as a timestamp
-    player.updatedAt = Date.now();
+    player.updatedAt = changeEpochToReadable(Date.now());
 
     await updateDoc(querySnapshot.docs[0].ref, player);
 
@@ -95,7 +97,7 @@ async function updatePlayer(id, player) {
  */
 async function getPlayer(id) {
   try {
-    const q = query(playersCollection, where("id", "==", id));
+    const q = query(playersCollection, where(documentId(), "==", id));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("Player not found");
     const player = querySnapshot.docs[0];
