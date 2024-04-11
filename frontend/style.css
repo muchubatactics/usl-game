@@ -514,3 +514,49 @@ dialog::backdrop {
     width: auto;
   }
 }
+
+.alert {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  background-color: #F6E013;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  align-items: center;
+}
+
+.alert svg {
+  width: 50px;
+  height: auto;
+  fill: #5A46DE;
+  margin-right: auto;
+}
+
+.alert.action {
+  animation: upanddown 3s ease-in-out 0s 1;
+} 
+
+.alert .text {
+  margin-left: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+}
+
+@keyframes upanddown {
+  0% {
+    transform: translateX(-50%) translateY(-100%);
+  }
+  5% {
+    transform: translateX(-50%) translateY(150%);
+  }
+  95% {
+    transform: translateX(-50%) translateY(150%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-100%);
+  }
+}
+
