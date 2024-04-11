@@ -1,6 +1,7 @@
 /**
  * what if, existence precedes essence?
  */
+// @ts-check
 
 import {
   changeEpochToReadable,
@@ -18,11 +19,11 @@ import "./style.css";
 class GameBackend {
   constructor() {
     this.currSessionId = null;
-    this.startTime = null;
+    this.startTime = 0;
 
     // session details
     // todo: set the session details to be accumulative -- for backend
-    this.durationPlayed = [];
+    this.durationPlayed = 0;
     this.levelStartedAt = [];
     this.levelEndedAt = [];
   }
@@ -45,7 +46,8 @@ class GameBackend {
       this.setStartTime();
       const sessionStored = this.processSessionForCreation();
       const returnedSession = await createSession(sessionStored);
-      !this.currSessionId && (this.currSessionId = returnedSession.id);
+      if (this.currSessionId) return;
+      this.currSessionId = returnedSession.id;
     } catch (e) {
       throw e;
     }
@@ -83,7 +85,7 @@ class GameBackend {
     const sessionToStore = {
       playerId: player.id,
       scores: player.scores,
-      durationPlayed: [],
+      durationPlayed: 0,
       levelEndedAt: [],
       levelStartedAt: [...this.levelStartedAt],
     };
@@ -105,7 +107,8 @@ class GameBackend {
       }
     };
     const currTime = Date.now();
-    this.durationPlayed.push(msToReadableTime(currTime - this.startTime));
+    // this.durationPlayed.push(msToReadableTime(currTime - this.startTime));
+    this.durationPlayed += currTime - this.startTime;
     this.levelEndedAt.push(changeEpochToReadable(currTime));
     const processedSession = {
       durationPlayed: this.durationPlayed,
