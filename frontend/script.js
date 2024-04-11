@@ -253,6 +253,7 @@ const scorebarParent = document.querySelector(".game .score-progress");
 const endModal = document.querySelector("dialog");
 const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
+const alertDiv = document.querySelector(".alert");
 
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
@@ -351,6 +352,8 @@ function runFailAnimation(div) {
   setTimeout(() => {
     temp.classList.remove("correct-animation");
   }, 1000);
+
+  runAlert("Testing mic one two");
 }
 
 function updateProgressBars() {
@@ -506,3 +509,13 @@ window.addEventListener("beforeunload", (event) => {
   // Chrome requires returnValue to be set
   event.returnValue = "Are you tired of playing?";
 });
+
+// alert stuff
+
+function runAlert(message) {
+  alertDiv.querySelector(".text").textContent = message;
+  alertDiv.classList.add("action");
+  setTimeout(() => {
+    alertDiv.classList.remove("action");
+  }, 3000);
+}
