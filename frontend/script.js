@@ -3,6 +3,7 @@
  */
 
 import {
+  changeEpochToReadable,
   createPlayer,
   createSession,
   updatePlayer,
@@ -10,6 +11,101 @@ import {
 } from "../backend";
 
 import "./style.css";
+
+/*
+  This is all the code that will talk to the backend
+*/
+class GameBackend {
+  constructor() {
+    this.currSessionId = null;
+    this.startTime = null;
+
+    // session details
+    // todo: set the session details to be accumulative -- for backend
+    this.durationPlayed = [];
+    this.levelStartedAt = [];
+    this.levelEndedAt = [];
+  }
+
+  async registerPlayer(name, age) {
+    try {
+      const userToRegister = {
+        name: name,
+        age: age,
+        badges: [],
+      };
+      return await createPlayer(userToRegister);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async setLoginInfo() {
+    try {
+      this.setStartTime();
+      const sessionStored = this.processSessionForCreation();
+      const returnedSession = await createSession(sessionStored);
+      !this.currSessionId && (this.currSessionId = returnedSession.id);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async updateUserSession() {
+    try {
+      const updatedPlayer = { badges: player.badges };
+      await updatePlayer(player.id, updatedPlayer);
+      const sessionUpdated = this.processSessionForUpdate();
+      const returnedSession = await updateSession(
+        this.currSessionId,
+        sessionUpdated
+      );
+
+      // todo: tell users to wait for a while till the scores are saved
+
+      window.alert("Points for this level were saved!");
+      this.resetStartTime();
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  setStartTime() {
+    !this.startTime && (this.startTime = Date.now());
+  }
+
+  resetStartTime() {
+    this.startTime && (this.startTime = null);
+  }
+
+  processSessionForCreation() {
+    this.levelStartedAt.push(changeEpochToReadable(this.startTime));
+    const sessionToStore = {
+      playerId: player.id,
+      scores: player.scores,
+      durationPlayed: [],
+      levelEndedAt: [],
+      levelStartedAt: [...this.levelStartedAt],
+    };
+    return sessionToStore;
+  }
+
+  processSessionForUpdate() {
+    const msToMins = function (ms) {
+      const mins = ms / 1000 / 60;
+      return `${mins.toFixed(2)} mins`;
+    };
+    const currTime = Date.now();
+    this.durationPlayed.push(msToMins(currTime - this.startTime));
+    this.levelEndedAt.push(changeEpochToReadable(currTime));
+    const processedSession = {
+      durationPlayed: this.durationPlayed,
+      levelEndedAt: this.levelEndedAt,
+      scores: player.scores,
+    };
+    return processedSession;
+  }
+}
 
 const playerBackend = new GameBackend(); // interact with the backend
 const player = {
@@ -22,32 +118,38 @@ const player = {
 
 document
   .querySelector(".intro-page form")
-  .addEventListener("submit", (event) => {
+  .addEventListener("submit", async (event) => {
     event.preventDefault();
     player.name = document.getElementById("name").value;
     player.age = Number(document.getElementById("age").value);
 
     // create player
-    playerBackend
-      .registerPlayer(player.name, player.age)
-      .then(function (returnedPlayer) {
-        player.id = returnedPlayer.id;
+    try {
+      const returnedPlayer = await playerBackend.registerPlayer(
+        player.name,
+        player.age
+      );
+      player.id = returnedPlayer.id;
 
+      try {
         // create a session
-        playerBackend
-          .setLoginInfo(returnedPlayer)
-          .then(() => {
-            console.log("logged in");
-          })
-          .catch((e) => {
-            console.error(e);
-            this.alert("Error setting session:", e.message);
-          });
-      })
-      .catch((e) => {
+        await playerBackend.setLoginInfo();
+      } catch (e) {
         console.error(e);
-        this.alert("Error creating player:", e.message);
-      });
+
+        // todo: we need a way to handle this error and take the user back to the intro page
+        // todo: so that they can try again
+        window.alert("Error setting session.");
+      }
+    } catch (e) {
+      console.error(e);
+
+      // todo: we need a way to handle this error and take the user back to the intro page
+      // todo: so that they can try again with a different name
+      window.alert(
+        "Error creating player: that name is already taken. Try another one."
+      );
+    }
 
     document
       .querySelector(".intro-page form")
@@ -342,6 +444,25 @@ function endLevel() {
     endModal.close();
   };
   endModal.showModal();
+
+  // set the player info on every end of a level
+  // i.e. update the badges, scores and session details
+  (async () => {
+    try {
+      await playerBackend.updateUserSession();
+      console.log("updated player and session info");
+
+      // set the start time for the next level
+      playerBackend.setStartTime();
+    } catch (e) {
+      console.error(e);
+
+      // todo: we need a way to handle this error and
+      // todo: tell the user that they were not logged out
+      // todo: but they can move on
+      window.alert("Error logging out: " + e.message);
+    }
+  })();
 }
 
 function handleClose() {
@@ -379,92 +500,9 @@ function loadlevelnum(num) {
 loadLevel(levels.level1);
 
 // call off cleanup when the user tries to leave the page
-window.addEventListener("beforeunload", function (event) {
+window.addEventListener("beforeunload", (event) => {
   event.preventDefault(); // Cancel the event
 
   // Chrome requires returnValue to be set
   event.returnValue = "Are you tired of playing?";
-
-  // set the player info on logout
-  // i.e. update the badges, scores and session details
-  playerBackend
-    .setInfoOnLogout()
-    .then(() => {
-      console.log("logged out");
-    })
-    .catch((e) => {
-      console.error(e);
-      this.alert("Error logging out:", e.message);
-    });
 });
-
-// //////////////////////////////////////////////////////////
-// backend code /////////////////////////////////////////////
-/*
-  This is all the code that will talk to the backend
-*/
-class GameBackend {
-  constructor() {
-    this.currSessionId = null;
-    this.loggedInAt = null;
-  }
-
-  async registerPlayer(name, age) {
-    try {
-      const userToRegister = {
-        name: name,
-        age: age,
-        badges: [],
-      };
-      return await createPlayer(userToRegister);
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  async setLoginInfo(returnedPlayer) {
-    if (!this.loggedInAt) this.loggedInAt = Date.now();
-    try {
-      const sessionStored = {
-        playerId: returnedPlayer.id,
-        durationPlayed: 0,
-        loggedInAt: this.loggedInAt,
-        loggedOutAt: 0,
-        scores: player.scores,
-      };
-      const returnedSession = await createSession(sessionStored);
-      console.log(returnedSession);
-
-      // update session id
-      if (!this.currSessionId) this.currSessionId = returnedSession.id;
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  async setInfoOnLogout() {
-    try {
-      const updatedPlayer = { badges: player.badges };
-      await updatePlayer(player.id, updatedPlayer);
-
-      // update session
-      const currTime = Date.now();
-      const sessionUpdated = {
-        durationPlayed: currTime - this.loggedInAt,
-        loggedOutAt: currTime,
-        scores: player.scores,
-      };
-      const returnedSession = await updateSession(
-        this.currSessionId,
-        sessionUpdated
-      );
-      console.log(returnedSession);
-
-      // reset the session id
-      this.currSessionId = null;
-      this.loggedInAt = null;
-    } catch (e) {
-      throw e;
-    }
-  }
-}
