@@ -91,12 +91,21 @@ class GameBackend {
   }
 
   processSessionForUpdate() {
-    const msToMins = function (ms) {
+    const msToReadableTime = function (ms) {
       const mins = ms / 1000 / 60;
-      return `${mins.toFixed(2)} mins`;
+      if (mins < 60) return `${mins.toFixed(2)} mins`;
+      else {
+        const hours = Math.floor(mins / 60);
+
+        if (hours < 24) return `${hours} hrs ${Math.floor(mins % 60)} mins`;
+        else {
+          const days = Math.floor(hours / 24);
+          return `${days} days ${Math.floor(hours % 24)} hrs`;
+        }
+      }
     };
     const currTime = Date.now();
-    this.durationPlayed.push(msToMins(currTime - this.startTime));
+    this.durationPlayed.push(msToReadableTime(currTime - this.startTime));
     this.levelEndedAt.push(changeEpochToReadable(currTime));
     const processedSession = {
       durationPlayed: this.durationPlayed,
