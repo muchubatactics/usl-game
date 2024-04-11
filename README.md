@@ -29,8 +29,8 @@ We have two collections in the database: `players` and `sessions`. The `players`
 {
     id: string,
     playerId: string,
-    loggedInAt: timestamp,
-    loggedOutAt: timestamp,
+    levelStartedAt: timestamp,
+    levelEndedAt: timestamp,
     durationPlayed: number,
     scores: string, // stored as JSON string that resolves to array of arrays of integers e.g. [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 }
