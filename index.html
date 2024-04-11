@@ -21,7 +21,7 @@
         <form action="" method="post" autocomplete="off">
           <label for="name">
             <span>Your Name:</span> 
-            <input type="text" name="name" id="name" required>
+            <input type="text" name="name" id="name" required pattern="^[a-zA-Z\s]+$" oninvalid="this.setCustomValidity('Your name should only contain lower and/or upper case letters')">
           </label>
           <label for="age">
             <span>Your Age:</span>
