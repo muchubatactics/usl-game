@@ -4,3 +4,6 @@
 /assets/background2.png
 /assets/background1.png
 /assets/gifs/x.mp4
+node_modules/
+.env
+notes
