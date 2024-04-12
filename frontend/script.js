@@ -25,6 +25,8 @@ class GameBackend {
     this.levelEndedAt = "";
   }
 
+  // todo: make runAlert a method of this class but async
+
   async registerPlayer(name, age) {
     try {
       const userToRegister = {
@@ -59,10 +61,7 @@ class GameBackend {
         this.currSessionId,
         sessionUpdated
       );
-
-      // todo: tell users to wait for a while till the scores are saved
-
-      window.alert("Points for this level were saved!");
+      runAlert("Saving your scores...");
       this.resetStartTime();
     } catch (e) {
       throw e;
@@ -94,7 +93,6 @@ class GameBackend {
       if (mins < 60) return `${mins.toFixed(2)} mins`;
       else {
         const hours = Math.floor(mins / 60);
-
         if (hours < 24) return `${hours} hrs ${Math.floor(mins % 60)} mins`;
         else {
           const days = Math.floor(hours / 24);
@@ -131,31 +129,27 @@ document
     player.age = Number(document.getElementById("age").value);
 
     // create player
+    runAlert("Creating player...");
     try {
       const returnedPlayer = await playerBackend.registerPlayer(
         player.name,
         player.age
       );
       player.id = returnedPlayer.id;
-
       try {
-        // create a session
         await playerBackend.setLoginInfo();
+        runAlert("Player created successfully!");
       } catch (e) {
         console.error(e);
+        runAlert("Error creating session: Try again");
 
         // todo: we need a way to handle this error and take the user back to the intro page
-        // todo: so that they can try again
-        window.alert("Error setting session.");
+        // todo: so that they can try again -- frontend
       }
     } catch (e) {
+      // note: if anything goes wrong during player creation, try to check this
+      // code block and debug it
       console.error(e);
-
-      // todo: we need a way to handle this error and take the user back to the intro page
-      // todo: so that they can try again with a different name
-      window.alert(
-        "Error creating player: that name is already taken. Try another one."
-      );
     }
 
     document
@@ -463,11 +457,9 @@ function endLevel() {
       playerBackend.setStartTime();
     } catch (e) {
       console.error(e);
-
-      // todo: we need a way to handle this error and
-      // todo: tell the user that they were not logged out
-      // todo: but they can move on
-      window.alert("Error logging out: " + e.message);
+      runAlert(
+        "Error updating player info: Try checking your internet connection"
+      );
     }
   })();
 }
