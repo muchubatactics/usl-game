@@ -37,6 +37,10 @@ const sessionsCollection = collection(db, "sessions");
  */
 async function createSession(session) {
   try {
+    // get previous session for the player if it exists
+    const previousSession = await getPreviousSession(session.playerId);
+    if (previousSession) return previousSession;
+
     // store user's score as a JSON string since it's a nested
     // array which firestore doesn't support
     session.scores && (session.scores = JSON.stringify(session.scores));

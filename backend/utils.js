@@ -1,6 +1,8 @@
-function changeEpochToReadable(epoch) {
+import { MD5 } from "crypto-js";
+export function changeEpochToReadable(epoch) {
   const date = new Date(epoch);
   return date.toUTCString();
 }
-
-export { changeEpochToReadable };
+export function hashString(str) {
+  return MD5(str).toString();
+}

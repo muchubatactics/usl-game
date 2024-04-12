@@ -18,13 +18,11 @@ import "./style.css";
 class GameBackend {
   constructor() {
     this.currSessionId = null;
-    this.startTime = null;
+    this.startTime = 0;
 
     // session details
-    // todo: set the session details to be accumulative -- for backend
-    this.durationPlayed = [];
-    this.levelStartedAt = [];
-    this.levelEndedAt = [];
+    this.durationPlayed = 0;
+    this.gameEndedAt = "";
   }
 
   async registerPlayer(name, age) {
@@ -45,7 +43,8 @@ class GameBackend {
       this.setStartTime();
       const sessionStored = this.processSessionForCreation();
       const returnedSession = await createSession(sessionStored);
-      !this.currSessionId && (this.currSessionId = returnedSession.id);
+      if (this.currSessionId) return;
+      this.currSessionId = returnedSession.id;
     } catch (e) {
       throw e;
     }
@@ -53,6 +52,7 @@ class GameBackend {
 
   async updateUserSession() {
     try {
+      runAlert("Saving your scores...");
       const updatedPlayer = { badges: player.badges };
       await updatePlayer(player.id, updatedPlayer);
       const sessionUpdated = this.processSessionForUpdate();
@@ -60,10 +60,7 @@ class GameBackend {
         this.currSessionId,
         sessionUpdated
       );
-
-      // todo: tell users to wait for a while till the scores are saved
-
-      window.alert("Points for this level were saved!");
+      runAlert("Scores saved successfully!");
       this.resetStartTime();
     } catch (e) {
       throw e;
@@ -71,36 +68,43 @@ class GameBackend {
   }
 
   setStartTime() {
-    !this.startTime && (this.startTime = Date.now());
+    this.startTime === 0 && (this.startTime = Date.now());
   }
 
   resetStartTime() {
-    this.startTime && (this.startTime = null);
+    this.startTime && (this.startTime = 0);
   }
 
   processSessionForCreation() {
-    this.levelStartedAt.push(changeEpochToReadable(this.startTime));
     const sessionToStore = {
       playerId: player.id,
       scores: player.scores,
-      durationPlayed: [],
-      levelEndedAt: [],
-      levelStartedAt: [...this.levelStartedAt],
+      durationPlayed: this.durationPlayed,
+      gameEndedAt: this.gameEndedAt,
+      gameStartedAt: changeEpochToReadable(this.startTime),
     };
     return sessionToStore;
   }
 
   processSessionForUpdate() {
-    const msToMins = function (ms) {
+    const msToReadableTime = function (ms) {
       const mins = ms / 1000 / 60;
-      return `${mins.toFixed(2)} mins`;
+      if (mins < 60) return `${mins.toFixed(2)} mins`;
+      else {
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return `${hours} hrs ${Math.floor(mins % 60)} mins`;
+        else {
+          const days = Math.floor(hours / 24);
+          return `${days} days ${Math.floor(hours % 24)} hrs`;
+        }
+      }
     };
     const currTime = Date.now();
-    this.durationPlayed.push(msToMins(currTime - this.startTime));
-    this.levelEndedAt.push(changeEpochToReadable(currTime));
+    this.gameEndedAt = changeEpochToReadable(currTime);
+    this.durationPlayed += currTime - this.startTime;
     const processedSession = {
-      durationPlayed: this.durationPlayed,
-      levelEndedAt: this.levelEndedAt,
+      durationPlayed: msToReadableTime(this.durationPlayed),
+      gameEndedAt: this.gameEndedAt,
       scores: player.scores,
     };
     return processedSession;
@@ -124,31 +128,29 @@ document
     player.age = Number(document.getElementById("age").value);
 
     // create player
+    runAlert("Creating player...");
     try {
       const returnedPlayer = await playerBackend.registerPlayer(
         player.name,
         player.age
       );
       player.id = returnedPlayer.id;
-
       try {
-        // create a session
         await playerBackend.setLoginInfo();
+        runAlert("Player created successfully!");
       } catch (e) {
         console.error(e);
+        runAlert(
+          "Error creating session: Try checking your internet connection."
+        );
 
         // todo: we need a way to handle this error and take the user back to the intro page
-        // todo: so that they can try again
-        window.alert("Error setting session.");
+        // todo: so that they can try again -- frontend
       }
     } catch (e) {
+      // note: if anything goes wrong during player creation, try to check this
+      // code block and debug it
       console.error(e);
-
-      // todo: we need a way to handle this error and take the user back to the intro page
-      // todo: so that they can try again with a different name
-      window.alert(
-        "Error creating player: that name is already taken. Try another one."
-      );
     }
 
     document
@@ -401,11 +403,10 @@ function endLevel() {
   let temp = endModal.querySelector(".award");
   console.log(temp);
 
-
   if (!player.badges.includes(state.level)) {
     console.log("her1");
     if (state.score >= 75) {
-    console.log("her333");
+      console.log("her333");
 
       temp.style.cssText = "display: flex";
       endModal
@@ -421,12 +422,10 @@ function endLevel() {
       } else {
         awardsDivOne.appendChild(div);
       }
-    }
-    else temp.style.cssText = "display: none";
+    } else temp.style.cssText = "display: none";
   } else temp.style.cssText = "display: none";
 
   console.log(state);
-
 
   if (state.score >= 75 && state.level < 5) {
     endModal.querySelector(".btns > .next").removeAttribute("disabled");
@@ -459,11 +458,9 @@ function endLevel() {
       playerBackend.setStartTime();
     } catch (e) {
       console.error(e);
-
-      // todo: we need a way to handle this error and
-      // todo: tell the user that they were not logged out
-      // todo: but they can move on
-      window.alert("Error logging out: " + e.message);
+      runAlert(
+        "Error updating player info: Try checking your internet connection"
+      );
     }
   })();
 }
