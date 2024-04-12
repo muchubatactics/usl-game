@@ -1,7 +1,6 @@
 /**
  * what if, existence precedes essence?
  */
-// @ts-check
 
 import {
   changeEpochToReadable,
@@ -22,10 +21,8 @@ class GameBackend {
     this.startTime = 0;
 
     // session details
-    // todo: set the session details to be accumulative -- for backend
     this.durationPlayed = 0;
-    this.levelStartedAt = [];
-    this.levelEndedAt = [];
+    this.levelEndedAt = "";
   }
 
   async registerPlayer(name, age) {
@@ -73,21 +70,20 @@ class GameBackend {
   }
 
   setStartTime() {
-    !this.startTime && (this.startTime = Date.now());
+    this.startTime === 0 && (this.startTime = Date.now());
   }
 
   resetStartTime() {
-    this.startTime && (this.startTime = null);
+    this.startTime && (this.startTime = 0);
   }
 
   processSessionForCreation() {
-    this.levelStartedAt.push(changeEpochToReadable(this.startTime));
     const sessionToStore = {
       playerId: player.id,
       scores: player.scores,
-      durationPlayed: 0,
-      levelEndedAt: [],
-      levelStartedAt: [...this.levelStartedAt],
+      durationPlayed: this.durationPlayed,
+      levelEndedAt: this.levelEndedAt,
+      gameStartedAt: changeEpochToReadable(this.startTime),
     };
     return sessionToStore;
   }
@@ -107,11 +103,10 @@ class GameBackend {
       }
     };
     const currTime = Date.now();
-    // this.durationPlayed.push(msToReadableTime(currTime - this.startTime));
+    this.levelEndedAt = changeEpochToReadable(currTime);
     this.durationPlayed += currTime - this.startTime;
-    this.levelEndedAt.push(changeEpochToReadable(currTime));
     const processedSession = {
-      durationPlayed: this.durationPlayed,
+      durationPlayed: msToReadableTime(this.durationPlayed),
       levelEndedAt: this.levelEndedAt,
       scores: player.scores,
     };
@@ -413,11 +408,10 @@ function endLevel() {
   let temp = endModal.querySelector(".award");
   console.log(temp);
 
-
   if (!player.badges.includes(state.level)) {
     console.log("her1");
     if (state.score >= 75) {
-    console.log("her333");
+      console.log("her333");
 
       temp.style.cssText = "display: flex";
       endModal
@@ -433,12 +427,10 @@ function endLevel() {
       } else {
         awardsDivOne.appendChild(div);
       }
-    }
-    else temp.style.cssText = "display: none";
+    } else temp.style.cssText = "display: none";
   } else temp.style.cssText = "display: none";
 
   console.log(state);
-
 
   if (state.score >= 75 && state.level < 5) {
     endModal.querySelector(".btns > .next").removeAttribute("disabled");

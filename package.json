@@ -14,7 +14,7 @@
   "author": "muchuba-tactics-and-winterrdog",
   "license": "MIT",
   "dependencies": {
-    "firebase": "^10.10.0"
+    "firebase": "^10.6.0"
   },
   "devDependencies": {
     "css-loader": "^7.1.1",
