@@ -343,7 +343,7 @@ function loadNewGif() {
 
   vidDiv
     .querySelector("img")
-    .setAttribute("src", `../assets/gifs/${alphabet[num]}.webp`);
+    .setAttribute("src", `./${alphabet[num]}.webp`);
   vidDiv.setAttribute("data-val", `${alphabet[num]}`);
 }
 
@@ -421,11 +421,11 @@ function endLevel() {
       temp.style.cssText = "display: flex";
       endModal
         .querySelector(".award > img")
-        .setAttribute("src", `../assets/badge${state.level}.png`);
+        .setAttribute("src", `./badge${state.level}.png`);
       player.badges.push(state.level);
 
       let div = document.createElement("div");
-      div.style.cssText = `background-image: url(../assets/badge${state.level}.png)`;
+      div.style.cssText = `background-image: url(./badge${state.level}.png)`;
       // awardsDiv.appendChild(div);
       if (state.level > 3) {
         awardsDivTwo.appendChild(div);
