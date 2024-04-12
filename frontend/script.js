@@ -22,7 +22,7 @@ class GameBackend {
 
     // session details
     this.durationPlayed = 0;
-    this.levelEndedAt = "";
+    this.gameEndedAt = "";
   }
 
   // todo: make runAlert a method of this class but async
@@ -54,6 +54,7 @@ class GameBackend {
 
   async updateUserSession() {
     try {
+      runAlert("Saving your scores...");
       const updatedPlayer = { badges: player.badges };
       await updatePlayer(player.id, updatedPlayer);
       const sessionUpdated = this.processSessionForUpdate();
@@ -61,7 +62,7 @@ class GameBackend {
         this.currSessionId,
         sessionUpdated
       );
-      runAlert("Saving your scores...");
+      runAlert("Scores saved successfully!");
       this.resetStartTime();
     } catch (e) {
       throw e;
@@ -81,7 +82,7 @@ class GameBackend {
       playerId: player.id,
       scores: player.scores,
       durationPlayed: this.durationPlayed,
-      levelEndedAt: this.levelEndedAt,
+      gameEndedAt: this.gameEndedAt,
       gameStartedAt: changeEpochToReadable(this.startTime),
     };
     return sessionToStore;
@@ -101,11 +102,11 @@ class GameBackend {
       }
     };
     const currTime = Date.now();
-    this.levelEndedAt = changeEpochToReadable(currTime);
+    this.gameEndedAt = changeEpochToReadable(currTime);
     this.durationPlayed += currTime - this.startTime;
     const processedSession = {
       durationPlayed: msToReadableTime(this.durationPlayed),
-      levelEndedAt: this.levelEndedAt,
+      gameEndedAt: this.gameEndedAt,
       scores: player.scores,
     };
     return processedSession;
@@ -141,7 +142,9 @@ document
         runAlert("Player created successfully!");
       } catch (e) {
         console.error(e);
-        runAlert("Error creating session: Try again");
+        runAlert(
+          "Error creating session: Try checking your internet connection."
+        );
 
         // todo: we need a way to handle this error and take the user back to the intro page
         // todo: so that they can try again -- frontend
