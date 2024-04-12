@@ -25,8 +25,6 @@ class GameBackend {
     this.gameEndedAt = "";
   }
 
-  // todo: make runAlert a method of this class but async
-
   async registerPlayer(name, age) {
     try {
       const userToRegister = {
