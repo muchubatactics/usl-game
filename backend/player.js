@@ -9,10 +9,10 @@ import {
   where,
 } from "firebase/firestore";
 import db from "./database";
-import { changeEpochToReadable } from "./utils";
+import { changeEpochToReadable, hashString } from "./utils";
 
 const playersCollection = collection(db, "players");
-
+const serverSalt = "951wtNtnSOaES4Iq";
 /**
  * creates a player
  * @param {Record<string,any>} player
@@ -27,20 +27,23 @@ const playersCollection = collection(db, "players");
  */
 async function createPlayer(player) {
   try {
-    // check if player with similar name exists
-    const q = query(playersCollection, where("name", "==", player.name));
-    const querySnapshot = await getDocs(q);
+    // save name and age as a single md5 hash
+    const userHash = hashString(player.name + player.age + serverSalt);
 
-    // if it exists, ask user to use a different name
+    // if player with similar hash exists, return that player
+    const q = query(playersCollection, where("userHash", "==", userHash));
+    const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
-      throw new Error(
-        "Player with similar name exists. Please use a different name."
-      );
+      return {
+        id: querySnapshot.docs[0].id,
+        ...querySnapshot.docs[0].data(),
+      };
     }
 
     // set createdAt to current date as a timestamp
     player.createdAt = player.updatedAt = changeEpochToReadable(Date.now());
 
+    player.userHash = userHash;
     const createdPlayer = await addDoc(playersCollection, player);
     return {
       id: createdPlayer.id,
