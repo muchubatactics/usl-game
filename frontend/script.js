@@ -2,6 +2,7 @@
  * what if, existence precedes essence?
  */
 
+
 import {
   changeEpochToReadable,
   createPlayer,
@@ -128,6 +129,8 @@ document
     player.age = Number(document.getElementById("age").value);
 
     // create player
+
+    let testForFailure = false;
     runAlert("Creating player...");
     try {
       const returnedPlayer = await playerBackend.registerPlayer(
@@ -141,17 +144,23 @@ document
       } catch (e) {
         console.error(e);
         runAlert(
-          "Error creating session: Try checking your internet connection."
+          "Error creating session: Try checking your internet connection and try again."
         );
 
         // todo: we need a way to handle this error and take the user back to the intro page
         // todo: so that they can try again -- frontend
+
+        testForFailure = true;
+
+        return;
       }
     } catch (e) {
       // note: if anything goes wrong during player creation, try to check this
       // code block and debug it
       console.error(e);
     }
+
+    if (testForFailure) return;
 
     document
       .querySelector(".intro-page form")
@@ -257,6 +266,8 @@ const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 const alertDiv = document.querySelector(".alert");
 
+runAlert("If you're on a handheld device, try landscape mode!");
+
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
   state.level = level.num;
@@ -355,7 +366,6 @@ function runFailAnimation(div) {
     temp.classList.remove("correct-animation");
   }, 1000);
 
-  runAlert("Testing mic one two");
 }
 
 function updateProgressBars() {
