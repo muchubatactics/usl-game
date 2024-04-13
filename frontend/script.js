@@ -45,6 +45,19 @@ class GameBackend {
       const sessionStored = this.processSessionForCreation();
       const returnedSession = await createSession(sessionStored);
       if (this.currSessionId) return;
+      if (returnedSession.durationPlayed) {
+        this.durationPlayed = this.convertReadbleTimeToMs(
+          returnedSession.durationPlayed
+        );
+      }
+
+      // if some scores are already stored, update the player's scores
+      if (
+        returnedSession.scores &&
+        returnedSession.scores.some((score) => score.length > 0)
+      ) {
+        player.scores = returnedSession.scores;
+      }
       this.currSessionId = returnedSession.id;
     } catch (e) {
       throw e;
@@ -65,6 +78,17 @@ class GameBackend {
       this.resetStartTime();
     } catch (e) {
       throw e;
+    }
+  }
+
+  convertReadbleTimeToMs(timeStr) {
+    // if time looks like "30 mins" or "2 hrs"
+    const time = timeStr.split(" ")[0];
+    if (timeStr.includes("mins")) {
+      return Number(time) * 60 * 1000;
+    }
+    if (timeStr.includes("hrs")) {
+      return Number(time) * 60 * 60 * 1000;
     }
   }
 
@@ -93,11 +117,7 @@ class GameBackend {
       if (mins < 60) return `${mins.toFixed(2)} mins`;
       else {
         const hours = Math.floor(mins / 60);
-        if (hours < 24) return `${hours} hrs ${Math.floor(mins % 60)} mins`;
-        else {
-          const days = Math.floor(hours / 24);
-          return `${days} days ${Math.floor(hours % 24)} hrs`;
-        }
+        return `${hours.toFixed(2)} hrs`;
       }
     };
     const currTime = Date.now();
