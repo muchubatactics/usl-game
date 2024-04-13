@@ -2,7 +2,6 @@
  * what if, existence precedes essence?
  */
 
-
 import {
   changeEpochToReadable,
   createPlayer,
@@ -54,6 +53,7 @@ class GameBackend {
       // if some scores are already stored, update the player's scores
       if (
         returnedSession.scores &&
+        Array.isArray(returnedSession.scores) &&
         returnedSession.scores.some((score) => score.length > 0)
       ) {
         player.scores = returnedSession.scores;
@@ -158,6 +158,15 @@ document
         player.age
       );
       player.id = returnedPlayer.id;
+
+      // if a player has some badges, update the player's badges
+      if (
+        Array.isArray(returnedPlayer.badges) &&
+        returnedPlayer.badges.length > 0
+      ) {
+        player.badges = returnedPlayer.badges;
+      }
+
       try {
         await playerBackend.setLoginInfo();
         runAlert("Player created successfully!");
@@ -361,9 +370,7 @@ function loadNewGif() {
   // vidDiv.querySelector('video').setAttribute("src", `./assets/gifs/${alphabet[num]}.webp`);
   // vidDiv.setAttribute("data-val", `${alphabet[num]}`);
 
-  vidDiv
-    .querySelector("img")
-    .setAttribute("src", `./${alphabet[num]}.webp`);
+  vidDiv.querySelector("img").setAttribute("src", `./${alphabet[num]}.webp`);
   vidDiv.setAttribute("data-val", `${alphabet[num]}`);
 }
 
@@ -385,7 +392,6 @@ function runFailAnimation(div) {
   setTimeout(() => {
     temp.classList.remove("correct-animation");
   }, 1000);
-
 }
 
 function updateProgressBars() {
