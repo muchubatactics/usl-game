@@ -266,7 +266,7 @@ const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 const alertDiv = document.querySelector(".alert");
 
-runAlert("If you're on a handheld device, try landscape mode!");
+// runAlert("If you're on a handheld device, try landscape mode!");   //no longer needed
 
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
