@@ -13,7 +13,7 @@
     <source media="(min-width: 768px) and (max-width: 1024px)" srcset="./bgtab.jpg">
     <source media="(max-width: 600px)" srcset="./bgmobile.jpg">
     <source media="(min-height: 768px) and (max-height: 1024px)" srcset="./bgtabl.jpg">
-    <source media="(min-width: 320px) and (max-width: 480px)" srcset="./bgmobile.jpg">
+    <source media="(min-width: 320px) and (max-width: 480px)" srcset="./bgmobile1.jpg">
     <img src="./bg.png" alt="">
   </picture>
 
@@ -35,6 +35,16 @@
             <span>Your Age:</span>
             <input type="number" name="age" id="age" required min="0" max="100">
           </label>
+          <div class="select-sex">
+            <div>
+              <input type="radio" id="male" name="sex" value="Male" checked />
+              <label for="male">Male</label>
+            </div>
+            <div>
+              <input type="radio" id="female" name="sex" value="Female" />
+              <label for="female">Female</label>
+          </div>
+            </div>
           <button type="submit">START GAME</button>
         </form>
       </main>

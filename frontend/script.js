@@ -511,10 +511,10 @@ loadLevel(levels.level1);
 
 // call off cleanup when the user tries to leave the page
 window.addEventListener("beforeunload", (event) => {
-  event.preventDefault(); // Cancel the event
+  // event.preventDefault(); // Cancel the event
 
   // Chrome requires returnValue to be set
-  event.returnValue = "Are you tired of playing?";
+  // event.returnValue = "Are you tired of playing?";
 });
 
 // alert stuff
