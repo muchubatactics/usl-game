@@ -460,9 +460,9 @@ function endLevel() {
 
 
   if (state.score >= 75 && state.level < 5) {
-    endModal.querySelector(".btns > .next").removeAttribute("disabled");
+    endModal.querySelector(".btns div > .next").removeAttribute("disabled");
   } else
-    endModal.querySelector(".btns > .next").setAttribute("disabled", "true");
+    endModal.querySelector(".btns div > .next").setAttribute("disabled", "true");
 
   endModal.addEventListener("close", handleClose);
 
