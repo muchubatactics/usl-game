@@ -266,7 +266,7 @@ const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 const alertDiv = document.querySelector(".alert");
 
-// runAlert("If you're on a handheld device, try landscape mode!");   //no longer needed
+if (isIPadorTablet()) runAlert("Try landscape mode on iPads and Tablets!", 4000);   //no longer needed
 
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
@@ -401,22 +401,17 @@ function endLevel() {
   player.scores[state.level - 1].push(state.score);
 
   if (state.score >= 75) {
-    endModal.querySelector("h1").textContent = "Yeyy! You Win!";
+    endModal.querySelector("h1").textContent = "Excellent Job!";
   } else {
-    endModal.querySelector("h1").textContent = "Noo! You Lose!";
+    endModal.querySelector("h1").textContent = "Good Trial";
   }
   endModal.querySelector(".score > h2").textContent = `You got ${state.score}%`;
-
-  console.log(" prexvcvdfgdsfgdfgdfgdf ");
-  console.log(state);
 
   let temp = endModal.querySelector(".award");
   console.log(temp);
 
   if (!player.badges.includes(state.level)) {
-    console.log("her1");
     if (state.score >= 75) {
-      console.log("her333");
 
       temp.style.cssText = "display: flex";
       endModal
@@ -519,10 +514,20 @@ window.addEventListener("beforeunload", (event) => {
 
 // alert stuff
 
-function runAlert(message) {
+function runAlert(message, time = 3000) {
   alertDiv.querySelector(".text").textContent = message;
   alertDiv.classList.add("action");
   setTimeout(() => {
     alertDiv.classList.remove("action");
-  }, 3000);
+  }, time);
+}
+
+function isIPadorTablet() {
+  if (window.screen.height < 1370 && window.screen.height > 1020) {
+    if (window.screen.width < 1030 && window.screen.width > 760) {
+      console.log('yess');
+      return true;
+    }
+  }
+  return false;
 }
