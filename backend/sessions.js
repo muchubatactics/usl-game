@@ -43,9 +43,14 @@ async function createSession(session) {
 
     // store user's score as a JSON string since it's a nested
     // array which firestore doesn't support
+    const originalScores = [...session.scores];
     session.scores && (session.scores = JSON.stringify(session.scores));
 
     const createdSession = await addDoc(sessionsCollection, session);
+
+    // restore the original scores array
+    session.scores = originalScores;
+
     return {
       id: createdSession.id,
       ...session,
@@ -148,7 +153,7 @@ async function getPreviousSession(playerId) {
     const q = query(
       sessionsCollection,
       where("playerId", "==", playerId),
-      orderBy("levelStartedAt", "desc"),
+      orderBy("gameStartedAt", "asc"),
       limit(1)
     );
     const querySnapshot = await getDocs(q);
