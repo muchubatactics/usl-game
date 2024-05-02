@@ -116,6 +116,7 @@ const playerBackend = new GameBackend(); // interact with the backend
 const player = {
   id: "", // set when player is created
   name: "",
+  sex: undefined, // 0 for female, 1 for male
   age: 0,
   badges: [],
   scores: [[], [], [], [], []],
@@ -127,6 +128,9 @@ document
     event.preventDefault();
     player.name = document.getElementById("name").value;
     player.age = Number(document.getElementById("age").value);
+    
+    if (document.getElementById("female").checked) player.sex = 0;
+    else player.sex = 1;
 
     // create player
 
@@ -178,7 +182,6 @@ formButton.addEventListener("mouseover", (event) => {
 formButton.addEventListener("mouseout", (event) => {
   formButton.classList.remove("mousein");
   formButton.classList.add("mouseout");
-  console.log("hehe");
 });
 
 const alphabet = [
@@ -408,7 +411,6 @@ function endLevel() {
   endModal.querySelector(".score > h2").textContent = `You got ${state.score}%`;
 
   let temp = endModal.querySelector(".award");
-  console.log(temp);
 
   if (!player.badges.includes(state.level)) {
     if (state.score >= 75) {
@@ -430,7 +432,6 @@ function endLevel() {
     } else temp.style.cssText = "display: none";
   } else temp.style.cssText = "display: none";
 
-  console.log(state);
 
   if (state.score >= 75 && state.level < 5) {
     endModal.querySelector(".btns > .next").removeAttribute("disabled");
@@ -525,7 +526,6 @@ function runAlert(message, time = 3000) {
 function isIPadorTablet() {
   if (window.screen.height < 1370 && window.screen.height > 1020) {
     if (window.screen.width < 1030 && window.screen.width > 760) {
-      console.log('yess');
       return true;
     }
   }
