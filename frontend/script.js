@@ -169,6 +169,7 @@ document
         returnedPlayer.badges.length > 0
       ) {
         player.badges = returnedPlayer.badges;
+        showBadgesFetchedFromBackEnd();
       }
 
       try {
@@ -202,6 +203,18 @@ document
     document.querySelector(".intro-page").setAttribute("hidden", "hidden");
     document.querySelector(".game").removeAttribute("hidden");
   });
+
+function showBadgesFetchedFromBackEnd() {
+  for (let i = 0; i < player.badges.length; i++) {
+    let div = document.createElement("div");
+    div.style.cssText = `background-image: url(./badge${player.badges[i]}.png)`;
+    if (player.badges[i] > 3) {
+      awardsDivTwo.appendChild(div);
+    } else {
+      awardsDivOne.appendChild(div);
+    }
+  }
+}
 
 const formButton = document.querySelector(".intro-page form button");
 formButton.addEventListener("mouseover", (event) => {
@@ -483,7 +496,7 @@ function endLevel() {
     loadlevelnum(1);
     endModal.close();
   };
-  
+
   endModal.showModal();
 
   // set the player info on every end of a level
