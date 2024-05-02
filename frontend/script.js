@@ -477,6 +477,13 @@ function endLevel() {
     loadlevelnum(state.level + 1);
     endModal.close();
   };
+
+  endModal.querySelector(".restart").onclick = function () {
+    endModal.removeEventListener("close", handleClose);
+    loadlevelnum(1);
+    endModal.close();
+  };
+  
   endModal.showModal();
 
   // set the player info on every end of a level
