@@ -386,7 +386,8 @@ function loadNewGif() {
   // vidDiv.querySelector('video').setAttribute("src", `./assets/gifs/${alphabet[num]}.webp`);
   // vidDiv.setAttribute("data-val", `${alphabet[num]}`);
 
-  vidDiv.querySelector("img").setAttribute("src", `./${alphabet[num]}.webp`);
+  vidDiv.querySelector("img").setAttribute("src", `./${alphabet[num]}.gif`);
+  // vidDiv.querySelector("img").setAttribute("src", `./${alphabet[num]}.webp`);
   vidDiv.setAttribute("data-val", `${alphabet[num]}`);
 }
 
