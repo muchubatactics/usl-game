@@ -25,11 +25,12 @@ class GameBackend {
     this.gameEndedAt = "";
   }
 
-  async registerPlayer(name, age) {
+  async registerPlayer(name, age, sex) {
     try {
       const userToRegister = {
         name: name,
         age: age,
+        gender: sex,
         badges: [],
       };
       return await createPlayer(userToRegister);
@@ -46,7 +47,7 @@ class GameBackend {
       if (this.currSessionId) return;
       if (returnedSession.durationPlayed) {
         this.durationPlayed = this.convertReadbleTimeToMs(
-          returnedSession.durationPlayed
+          returnedSession.durationPlayed,
         );
       }
 
@@ -72,7 +73,7 @@ class GameBackend {
       const sessionUpdated = this.processSessionForUpdate();
       const returnedSession = await updateSession(
         this.currSessionId,
-        sessionUpdated
+        sessionUpdated,
       );
       runAlert("Scores saved successfully!");
       this.resetStartTime();
@@ -148,7 +149,7 @@ document
     event.preventDefault();
     player.name = document.getElementById("name").value;
     player.age = Number(document.getElementById("age").value);
-    
+
     if (document.getElementById("female").checked) player.sex = 0;
     else player.sex = 1;
 
@@ -159,7 +160,8 @@ document
     try {
       const returnedPlayer = await playerBackend.registerPlayer(
         player.name,
-        player.age
+        player.age,
+        player.sex,
       );
       player.id = returnedPlayer.id;
 
@@ -178,7 +180,7 @@ document
       } catch (e) {
         console.error(e);
         runAlert(
-          "Error creating session: Try checking your internet connection and try again."
+          "Error creating session: Try checking your internet connection and try again.",
         );
 
         // todo: we need a way to handle this error and take the user back to the intro page
@@ -297,10 +299,10 @@ let state = {
 };
 
 const levelNumDiv = document.querySelector(
-  ".game .top .level-div .value div:nth-child(2)"
+  ".game .top .level-div .value div:nth-child(2)",
 );
 const scoreNumDiv = document.querySelector(
-  ".game .top .score-div .value div:nth-child(2)"
+  ".game .top .score-div .value div:nth-child(2)",
 );
 const letterParentDiv = document.querySelector(".bottom .letters");
 const vidDiv = document.querySelector(".game .gif");
@@ -311,7 +313,8 @@ const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 const alertDiv = document.querySelector(".alert");
 
-if (isIPadorTablet()) runAlert("Try landscape mode on iPads and Tablets!", 4000);   //no longer needed
+if (isIPadorTablet())
+  runAlert("Try landscape mode on iPads and Tablets!", 4000); //no longer needed
 
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
@@ -403,7 +406,7 @@ function runFailAnimation(div) {
   }, 1000);
   let letter = vidDiv.getAttribute("data-val");
   let temp = document.querySelector(
-    `.bottom .letters div[data-val='${letter}']`
+    `.bottom .letters div[data-val='${letter}']`,
   );
   temp.classList.add("correct-animation");
   setTimeout(() => {
@@ -413,14 +416,14 @@ function runFailAnimation(div) {
 
 function updateProgressBars() {
   progressbarParent.querySelector(
-    `div:nth-child(${state.clicks})`
+    `div:nth-child(${state.clicks})`,
   ).style.cssText = "background-color: orange";
   progressbarParent
     .querySelector(`div:nth-child(${state.clicks})`)
     .classList.add("move");
   if (state.passed) {
     scorebarParent.querySelector(
-      `div:nth-child(${state.passed})`
+      `div:nth-child(${state.passed})`,
     ).style.cssText = "background-color: red";
     if (state.score >= 40 && state.score < 75) {
       scorebarParent.style.cssText += "border: 1px solid orange";
@@ -454,7 +457,6 @@ function endLevel() {
 
   if (!player.badges.includes(state.level)) {
     if (state.score >= 75) {
-
       temp.style.cssText = "display: flex";
       endModal
         .querySelector(".award > img")
@@ -472,11 +474,12 @@ function endLevel() {
     } else temp.style.cssText = "display: none";
   } else temp.style.cssText = "display: none";
 
-
   if (state.score >= 75 && state.level < 5) {
     endModal.querySelector(".btns div > .next").removeAttribute("disabled");
   } else
-    endModal.querySelector(".btns div > .next").setAttribute("disabled", "true");
+    endModal
+      .querySelector(".btns div > .next")
+      .setAttribute("disabled", "true");
 
   endModal.addEventListener("close", handleClose);
 
@@ -512,7 +515,7 @@ function endLevel() {
     } catch (e) {
       console.error(e);
       runAlert(
-        "Error updating player info: Try checking your internet connection"
+        "Error updating player info: Try checking your internet connection",
       );
     }
   })();
@@ -555,7 +558,6 @@ loadLevel(levels.level1);
 // call off cleanup when the user tries to leave the page
 window.addEventListener("beforeunload", (event) => {
   // event.preventDefault(); // Cancel the event
-
   // Chrome requires returnValue to be set
   // event.returnValue = "Are you tired of playing?";
 });

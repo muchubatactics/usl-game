@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bevan:ital@0;1&family=BioRhyme+Expanded:wght@200;300;400;700;800&family=Holtwood+One+SC&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Luckiest+Guy&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Stint+Ultra+Expanded&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bevan:ital@0;1&family=BioRhyme+Expanded:wght@200;300;400;700;800&family=Holtwood+One+SC&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Luckiest+Guy&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Stint+Ultra+Expanded&display=swap");
 
 /*
 COLORS
@@ -10,7 +10,6 @@ COLORS
 #E12E8A PINK
 
 */
-
 
 body {
   height: 100vh;
@@ -24,7 +23,6 @@ body > picture > img {
   position: relative;
   height: 100vh;
   width: 100%;
-
 }
 
 :root {
@@ -40,7 +38,7 @@ body > picture > img {
   width: 100%;
   height: 100%;
 }
- /*
+/*
  intro page
  */
 
@@ -58,8 +56,8 @@ body > picture > img {
 }
 
 .heading > .title {
-  font-family: 'Bevan', sans-serif;
-  color: #F66F00;
+  font-family: "Bevan", sans-serif;
+  color: #f66f00;
   font-size: 1rem;
   text-align: center;
 }
@@ -73,7 +71,7 @@ main form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1.5fr 1fr;
-  font-family: 'Bevan', serif;
+  font-family: "Bevan", serif;
   column-gap: 10px;
   row-gap: 20px;
 }
@@ -81,22 +79,22 @@ main form {
 form button {
   grid-area: 3 / 1 / 4 / 3;
   /* background-color: #F66F00; */
-  background-color: #F6E013;
+  background-color: #f6e013;
   border-radius: 10px;
   color: black;
-  font-family: 'Holtwood One SC', sans-serif;
+  font-family: "Holtwood One SC", sans-serif;
   border: 0px;
   font-size: 2rem;
 }
 
 form button.mousein {
   transform: scale(0.95);
-  animation: hoverscale 0.5s ease-in-out  1  ;
+  animation: hoverscale 0.5s ease-in-out 1;
 }
 
 form button.mouseout {
   transform: scale(1);
-  animation: hoverscaleout 0.5s ease-in-out  1  ;
+  animation: hoverscaleout 0.5s ease-in-out 1;
 }
 
 ::placeholder {
@@ -109,7 +107,7 @@ form .select-sex {
   font-size: 1.5rem;
   width: 50%;
   align-self: center;
-  font-family: 'Bevan', sans-serif;
+  font-family: "Bevan", sans-serif;
 }
 
 form .select-sex > div {
@@ -125,7 +123,6 @@ form .select-sex > div > input {
   width: 20px;
   justify-self: self-start;
 }
-
 
 @keyframes hoverscaleout {
   0% {
@@ -156,8 +153,8 @@ form input {
   width: 100%;
   font-size: 1.5rem;
   padding: 5px;
-  font-family: 'Stint Ultra Expanded', serif;
-  background-color: #F66F00;
+  font-family: "Stint Ultra Expanded", serif;
+  background-color: #f66f00;
   border: 0px;
   color: white;
 }
@@ -175,28 +172,29 @@ form input {
 
 .game .top {
   display: flex;
-  font-family: 'BioRhyme Expanded';
+  font-family: "BioRhyme Expanded";
   font-size: 0.8rem;
 }
 
 .game .top .value {
   height: 7rem;
   width: 7rem;
-  background-color: #F66F00;
+  background-color: #f66f00;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Luckiest Guy', sans-serif;
+  font-family: "Luckiest Guy", sans-serif;
   font-size: 3rem;
   border: 4px solid white;
 }
 
-.game .score, .game .level {
+.game .score,
+.game .level {
   text-align: center;
   font-size: 0.6rem;
-  font-family: 'BioRhyme Expanded';
+  font-family: "BioRhyme Expanded";
   margin-bottom: 10px;
 }
 
@@ -215,7 +213,8 @@ form input {
   text-align: center;
 }
 
-.game .level-progress, .game .score-progress {
+.game .level-progress,
+.game .score-progress {
   height: 0.6rem;
   width: 100%;
   border: 1px solid orange;
@@ -224,7 +223,7 @@ form input {
 }
 
 .move {
-  animation: move 1s ease  1  ;
+  animation: move 1s ease 1;
 }
 
 @keyframes move {
@@ -235,7 +234,6 @@ form input {
   100% {
     width: 100%;
   }
-  
 }
 
 .game .level-progress {
@@ -259,11 +257,10 @@ form input {
   display: grid;
 }
 
-
 .game main {
   /* display: grid; */
   /* grid-template-columns: 200px 1fr 200px; */
-  font-family: 'PlayFair Display';
+  font-family: "PlayFair Display";
   margin-bottom: 40px;
 }
 
@@ -308,7 +305,7 @@ form input {
 }
 
 .game .bottom {
-  font-family: 'Stint Ultra Expanded';
+  font-family: "Stint Ultra Expanded";
 }
 
 .game .bottom > div:nth-child(1) {
@@ -327,7 +324,7 @@ form input {
 }
 
 .game .bottom div div {
-  background-color: #F6E013;
+  background-color: #f6e013;
   height: 3rem;
   width: 100%;
   box-sizing: border-box;
@@ -335,7 +332,7 @@ form input {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Holtwood One SC';
+  font-family: "Holtwood One SC";
   font-size: 2rem;
 }
 
@@ -380,18 +377,16 @@ form input {
   50% {
     transform: translateX(5px);
     background-color: red;
-
   }
 
   75% {
     transform: translateX(-5px);
     background-color: red;
-
   }
 
   100% {
     transform: translateX(0px);
-    background-color:#F6E013;
+    background-color: #f6e013;
   }
 }
 
@@ -432,29 +427,29 @@ form input {
 */
 
 dialog {
-  padding:  50px 100px;
+  padding: 50px 100px;
   border-radius: 25px;
-  border: 8px solid #5A46DE;
+  border: 8px solid #5a46de;
   background-color: #9cfffa;
   /* display: grid; */
 }
 
 dialog h1 {
-  font-family: 'Bevan';
+  font-family: "Bevan";
   text-align: center;
-  color: #5A46DE;
+  color: #5a46de;
   margin-top: 0px;
 }
 
 dialog h2 {
-  font-family: 'Bevan';
+  font-family: "Bevan";
   margin-top: -20px;
   text-align: center;
-  color: #E12E8A;
+  color: #e12e8a;
 }
 
 dialog h3 {
-  font-family: 'Bevan';
+  font-family: "Bevan";
   text-align: center;
   margin-top: -20px;
   margin-bottom: 0px;
@@ -476,10 +471,10 @@ dialog .award img {
 }
 
 dialog button {
-  background-color: #F6E013;
+  background-color: #f6e013;
   border: 0px;
   padding: 20px;
-  font-family: 'Bevan';
+  font-family: "Bevan";
   font-size: 1.5rem;
   margin: 10px;
   border-radius: 10px;
@@ -488,7 +483,6 @@ dialog button {
 dialog button:hover {
   transform: scale(0.95);
 }
-
 
 dialog::backdrop {
   background-color: rgba(20, 57, 138, 0.25);
@@ -506,10 +500,8 @@ dialog .btns div:nth-child(2) {
   justify-content: center;
 }
 
-
 /* media queries */
 @media screen and (max-width: 1280px) {
-
   body {
     overflow-y: auto;
   }
@@ -543,11 +535,9 @@ dialog .btns div:nth-child(2) {
     max-height: 300px;
     width: auto;
   }
-
 }
 
 @media screen and (max-width: 1024px) {
-
   body {
     overflow-y: auto;
   }
@@ -579,7 +569,7 @@ dialog .btns div:nth-child(2) {
   top: 0;
   left: 50%;
   transform: translateX(-50%) translateY(-100%);
-  background-color: #F6E013;
+  background-color: #f6e013;
   border-radius: 20px;
   display: flex;
   flex-direction: row;
@@ -590,17 +580,17 @@ dialog .btns div:nth-child(2) {
 .alert svg {
   width: 50px;
   height: auto;
-  fill: #5A46DE;
+  fill: #5a46de;
   margin-right: auto;
 }
 
 .alert.action {
   animation: upanddown 3s ease-in-out 0s 1;
-} 
+}
 
 .alert .text {
   margin-left: 10px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 20px;
 }
 
@@ -620,7 +610,6 @@ dialog .btns div:nth-child(2) {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-
   body {
     overflow-y: auto;
   }
@@ -630,7 +619,7 @@ dialog .btns div:nth-child(2) {
     left: 15.5%;
     top: 11%;
   }
-  
+
   .game .score-div {
     position: absolute;
     right: 6%;
@@ -672,7 +661,6 @@ dialog .btns div:nth-child(2) {
     flex-direction: column;
   }
 
-
   main form input {
     font-size: 15px;
   }
@@ -697,18 +685,18 @@ dialog .btns div:nth-child(2) {
     height: 4.3rem;
   }
 
-  .game .top .value .level, .game .top .value .score {
+  .game .top .value .level,
+  .game .top .value .score {
     margin-bottom: 0px;
     margin-top: 5px;
   }
-
 
   .game .level-div {
     position: absolute;
     left: 3%;
     top: 9%;
   }
-  
+
   .game .score-div {
     position: absolute;
     right: 0%;
@@ -772,17 +760,16 @@ dialog .btns div:nth-child(2) {
   }
 
   dialog {
-    padding:  10px;
+    padding: 10px;
     border-radius: 25px;
-    border: 4px solid #5A46DE;
+    border: 4px solid #5a46de;
     /* display: grid; */
   }
-  
-  
+
   dialog .award img {
     height: 200px;
   }
-  
+
   dialog button {
     border: 0px;
     padding: 10px;
@@ -794,15 +781,13 @@ dialog .btns div:nth-child(2) {
   .alert {
     padding: 5px;
   }
-  
+
   .alert .text {
     font-size: 12px;
   }
-
 }
 
 @media (min-height: 320px) and (max-height: 480px) {
-
   body {
     overflow-y: auto;
   }
@@ -829,13 +814,12 @@ dialog .btns div:nth-child(2) {
     font-size: 1rem;
   }
 
-
   .game .level-div {
     position: absolute;
     left: 15%;
     top: 4%;
   }
-  
+
   .game .score-div {
     position: absolute;
     right: 5%;
@@ -861,17 +845,16 @@ dialog .btns div:nth-child(2) {
   }
 
   dialog {
-    padding:  5px 10px;
+    padding: 5px 10px;
     border-radius: 25px;
-    border: 4px solid #5A46DE;
+    border: 4px solid #5a46de;
     /* display: grid; */
   }
-  
-  
+
   dialog .award img {
     height: 100px;
   }
-  
+
   dialog button {
     border: 0px;
     padding: 10px;
@@ -888,7 +871,7 @@ dialog .btns div:nth-child(2) {
   .alert {
     padding: 5px;
   }
-  
+
   .alert .text {
     font-size: 12px;
   }
