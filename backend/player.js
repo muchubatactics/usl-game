@@ -1,12 +1,12 @@
 // @ts-check
 import {
-  addDoc,
-  collection,
-  documentId,
-  getDocs,
-  query,
-  updateDoc,
-  where,
+	addDoc,
+	collection,
+	documentId,
+	getDocs,
+	query,
+	updateDoc,
+	where,
 } from "firebase/firestore";
 import db from "./database";
 import { changeEpochToReadable, hashString } from "./utils";
@@ -26,33 +26,33 @@ const serverSalt = "951wtNtnSOaES4Iq";
  * })
  */
 async function createPlayer(player) {
-  try {
-    // save name and age as a single md5 hash
-    const userHash = hashString(player.name + player.age + serverSalt);
+	try {
+		// save name and age as a single md5 hash
+		const userHash = hashString(player.name + player.age + serverSalt);
 
-    // if player with similar hash exists, return that player
-    const q = query(playersCollection, where("userHash", "==", userHash));
-    const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty) {
-      return {
-        id: querySnapshot.docs[0].id,
-        ...querySnapshot.docs[0].data(),
-      };
-    }
+		// if player with similar hash exists, return that player
+		const q = query(playersCollection, where("userHash", "==", userHash));
+		const querySnapshot = await getDocs(q);
+		if (!querySnapshot.empty) {
+			return {
+				id: querySnapshot.docs[0].id,
+				...querySnapshot.docs[0].data(),
+			};
+		}
 
-    // set createdAt to current date as a timestamp
-    player.createdAt = player.updatedAt = changeEpochToReadable(Date.now());
+		// set createdAt to current date as a timestamp
+		player.createdAt = player.updatedAt = changeEpochToReadable(Date.now());
 
-    player.userHash = userHash;
-    const createdPlayer = await addDoc(playersCollection, player);
-    return {
-      id: createdPlayer.id,
-      ...player,
-    };
-  } catch (e) {
-    console.error("Error adding document: ", e);
-    return null;
-  }
+		player.userHash = userHash;
+		const createdPlayer = await addDoc(playersCollection, player);
+		return {
+			id: createdPlayer.id,
+			...player,
+		};
+	} catch (e) {
+		console.error("Error adding document: ", e);
+		return null;
+	}
 }
 
 /**
@@ -68,25 +68,25 @@ async function createPlayer(player) {
  * })
  */
 async function updatePlayer(id, player) {
-  try {
-    const q = query(playersCollection, where(documentId(), "==", id));
-    let querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) throw new Error("Player not found");
+	try {
+		const q = query(playersCollection, where(documentId(), "==", id));
+		let querySnapshot = await getDocs(q);
+		if (querySnapshot.empty) throw new Error("Player not found");
 
-    // set updatedAt to current date as a timestamp
-    player.updatedAt = changeEpochToReadable(Date.now());
+		// set updatedAt to current date as a timestamp
+		player.updatedAt = changeEpochToReadable(Date.now());
 
-    await updateDoc(querySnapshot.docs[0].ref, player);
+		await updateDoc(querySnapshot.docs[0].ref, player);
 
-    querySnapshot = await getDocs(q);
-    return {
-      id: querySnapshot.docs[0].id,
-      ...querySnapshot.docs[0].data(),
-    };
-  } catch (e) {
-    console.error("Error updating document: ", e);
-    return null;
-  }
+		querySnapshot = await getDocs(q);
+		return {
+			id: querySnapshot.docs[0].id,
+			...querySnapshot.docs[0].data(),
+		};
+	} catch (e) {
+		console.error("Error updating document: ", e);
+		return null;
+	}
 }
 
 /**
@@ -99,19 +99,19 @@ async function updatePlayer(id, player) {
  * const player = await getPlayer("player-id")
  */
 async function getPlayer(id) {
-  try {
-    const q = query(playersCollection, where(documentId(), "==", id));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) throw new Error("Player not found");
-    const player = querySnapshot.docs[0];
-    return {
-      id: player.id,
-      ...player.data(),
-    };
-  } catch (e) {
-    console.error("Error getting document: ", e);
-    return null;
-  }
+	try {
+		const q = query(playersCollection, where(documentId(), "==", id));
+		const querySnapshot = await getDocs(q);
+		if (querySnapshot.empty) throw new Error("Player not found");
+		const player = querySnapshot.docs[0];
+		return {
+			id: player.id,
+			...player.data(),
+		};
+	} catch (e) {
+		console.error("Error getting document: ", e);
+		return null;
+	}
 }
 
 export { createPlayer, updatePlayer, getPlayer };

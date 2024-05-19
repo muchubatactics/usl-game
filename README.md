@@ -4,11 +4,15 @@ A web based game to teach children sign language alphabet
 
 ## Backend
 
-We're using Google's Firebase for the backend. The database is a Firestore database.
+We're using Google's Firebase for the backend. The database is a Firestore
+database.
 
 ### Database Structure or Schema
 
-We have two collections in the database: `players` and `sessions`. The `players` collection stores the user's game information and the `sessions` collection stores the user's session information like duration played, login times, logout times, etc.
+We have two collections in the database: `players` and `sessions`. The `players`
+collection stores the user's game information and the `sessions` collection
+stores the user's session information like duration played, login times, logout
+times, etc.
 
 #### players
 
@@ -37,4 +41,46 @@ We have two collections in the database: `players` and `sessions`. The `players`
 }
 ```
 
-**NOTE**: The backend expects all the data it receives to be in the format specified above. We've not included deletion of users or sessions in the backend. We're assuming that the user will not be deleted from the database. **All data is stored in the database permanently**.
+## For Developers
+
+**NOTE**: We are using `npm` as the package manager. Make sure you have `npm` installed on your system. We're aware of other package managers like `yarn` or `pnpm` but we're using `npm` for this project :).
+
+### Install dependencies
+
+To install the dependencies, run the following command:
+
+```bash
+npm install
+```
+
+### Formatting the code
+
+We're using `prettier` to format the code. You can run the following command to
+format the code:
+
+```bash
+npm run format
+```
+
+### Running in development mode
+
+To run the project in development mode, run the following command:
+
+```bash
+npm run watch
+```
+
+### Make final build
+
+To make the final build, run the following command:
+
+```bash
+npm run build
+```
+
+This will create a `dist` directory with the final build.
+
+**NOTE**: The backend expects all the data it receives to be in the format
+specified above. We've not included deletion of users or sessions in the
+backend. We're assuming that the user will not be deleted from the database.
+**All data is stored in the database permanently**.
