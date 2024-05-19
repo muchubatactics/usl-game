@@ -55,7 +55,7 @@ class GameBackend {
       if (
         returnedSession.scores &&
         Array.isArray(returnedSession.scores) &&
-        returnedSession.scores.some(score => score.length > 0)
+        returnedSession.scores.some((score) => score.length > 0)
       ) {
         player.scores = returnedSession.scores;
       }
@@ -145,7 +145,7 @@ const player = {
 
 document
   .querySelector(".intro-page form")
-  .addEventListener("submit", async event => {
+  .addEventListener("submit", async (event) => {
     event.preventDefault();
     player.name = document.getElementById("name").value;
     player.age = Number(document.getElementById("age").value);
@@ -219,11 +219,11 @@ function showBadgesFetchedFromBackEnd() {
 }
 
 const formButton = document.querySelector(".intro-page form button");
-formButton.addEventListener("mouseover", event => {
+formButton.addEventListener("mouseover", (event) => {
   formButton.classList.remove("mouseout");
   formButton.classList.add("mousein");
 });
-formButton.addEventListener("mouseout", event => {
+formButton.addEventListener("mouseout", (event) => {
   formButton.classList.remove("mousein");
   formButton.classList.add("mouseout");
 });
@@ -556,7 +556,7 @@ function loadlevelnum(num) {
 loadLevel(levels.level1);
 
 // call off cleanup when the user tries to leave the page
-window.addEventListener("beforeunload", event => {
+window.addEventListener("beforeunload", (event) => {
   // event.preventDefault(); // Cancel the event
   // Chrome requires returnValue to be set
   // event.returnValue = "Are you tired of playing?";
