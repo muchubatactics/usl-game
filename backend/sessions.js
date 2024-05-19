@@ -1,14 +1,14 @@
 // @ts-check
 import {
-	addDoc,
-	collection,
-	documentId,
-	getDocs,
-	limit,
-	orderBy,
-	query,
-	updateDoc,
-	where,
+  addDoc,
+  collection,
+  documentId,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import db from "./database";
 
@@ -36,29 +36,29 @@ const sessionsCollection = collection(db, "sessions");
  * // }
  */
 async function createSession(session) {
-	try {
-		// get previous session for the player if it exists
-		const previousSession = await getPreviousSession(session.playerId);
-		if (previousSession) return previousSession;
+  try {
+    // get previous session for the player if it exists
+    const previousSession = await getPreviousSession(session.playerId);
+    if (previousSession) return previousSession;
 
-		// store user's score as a JSON string since it's a nested
-		// array which firestore doesn't support
-		const originalScores = [...session.scores];
-		session.scores && (session.scores = JSON.stringify(session.scores));
+    // store user's score as a JSON string since it's a nested
+    // array which firestore doesn't support
+    const originalScores = [...session.scores];
+    session.scores && (session.scores = JSON.stringify(session.scores));
 
-		const createdSession = await addDoc(sessionsCollection, session);
+    const createdSession = await addDoc(sessionsCollection, session);
 
-		// restore the original scores array
-		session.scores = originalScores;
+    // restore the original scores array
+    session.scores = originalScores;
 
-		return {
-			id: createdSession.id,
-			...session,
-		};
-	} catch (e) {
-		console.error("Error creating session: ", e);
-		return null;
-	}
+    return {
+      id: createdSession.id,
+      ...session,
+    };
+  } catch (e) {
+    console.error("Error creating session: ", e);
+    return null;
+  }
 }
 
 /**
@@ -88,26 +88,26 @@ async function createSession(session) {
  * // }
  */
 async function updateSession(id, session) {
-	try {
-		const q = query(sessionsCollection, where(documentId(), "==", id));
-		let querySnapshot = await getDocs(q);
-		if (querySnapshot.empty) throw new Error("Session not found");
+  try {
+    const q = query(sessionsCollection, where(documentId(), "==", id));
+    let querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) throw new Error("Session not found");
 
-		// store user's score as a JSON string since it's a nested
-		// array which firestore doesn't support
-		session.scores && (session.scores = JSON.stringify(session.scores));
+    // store user's score as a JSON string since it's a nested
+    // array which firestore doesn't support
+    session.scores && (session.scores = JSON.stringify(session.scores));
 
-		await updateDoc(querySnapshot.docs[0].ref, session);
+    await updateDoc(querySnapshot.docs[0].ref, session);
 
-		querySnapshot = await getDocs(q);
-		return {
-			id: querySnapshot.docs[0].id,
-			...querySnapshot.docs[0].data(),
-		};
-	} catch (e) {
-		console.error("Error updating session: ", e);
-		return null;
-	}
+    querySnapshot = await getDocs(q);
+    return {
+      id: querySnapshot.docs[0].id,
+      ...querySnapshot.docs[0].data(),
+    };
+  } catch (e) {
+    console.error("Error updating session: ", e);
+    return null;
+  }
 }
 
 /**
@@ -119,23 +119,23 @@ async function updateSession(id, session) {
  * const session = await getSession("session-id")
  */
 async function getSession(id) {
-	try {
-		const q = query(sessionsCollection, where(documentId(), "==", id));
-		const querySnapshot = await getDocs(q);
-		if (querySnapshot.empty) throw new Error("Session not found");
-		const session = querySnapshot.docs[0].data();
+  try {
+    const q = query(sessionsCollection, where(documentId(), "==", id));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) throw new Error("Session not found");
+    const session = querySnapshot.docs[0].data();
 
-		// parse the score from JSON string to array
-		session.scores && (session.scores = JSON.parse(session.scores));
+    // parse the score from JSON string to array
+    session.scores && (session.scores = JSON.parse(session.scores));
 
-		return {
-			id,
-			...session,
-		};
-	} catch (e) {
-		console.error("Error getting session: ", e);
-		return null;
-	}
+    return {
+      id,
+      ...session,
+    };
+  } catch (e) {
+    console.error("Error getting session: ", e);
+    return null;
+  }
 }
 
 /**
@@ -148,29 +148,29 @@ async function getSession(id) {
  * const session = await getPreviousSession("player-id")
  */
 async function getPreviousSession(playerId) {
-	try {
-		// get all sessions for the player
-		const q = query(
-			sessionsCollection,
-			where("playerId", "==", playerId),
-			orderBy("gameStartedAt", "asc"),
-			limit(1),
-		);
-		const querySnapshot = await getDocs(q);
-		if (querySnapshot.empty) throw new Error("No previous session found");
-		const session = querySnapshot.docs[0].data();
+  try {
+    // get all sessions for the player
+    const q = query(
+      sessionsCollection,
+      where("playerId", "==", playerId),
+      orderBy("gameStartedAt", "asc"),
+      limit(1),
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) throw new Error("No previous session found");
+    const session = querySnapshot.docs[0].data();
 
-		// parse the score from JSON string to array
-		session.scores && (session.scores = JSON.parse(session.scores));
+    // parse the score from JSON string to array
+    session.scores && (session.scores = JSON.parse(session.scores));
 
-		return {
-			id: querySnapshot.docs[0].id,
-			...session,
-		};
-	} catch (e) {
-		console.error("Error getting previous session: ", e);
-		return null;
-	}
+    return {
+      id: querySnapshot.docs[0].id,
+      ...session,
+    };
+  } catch (e) {
+    console.error("Error getting previous session: ", e);
+    return null;
+  }
 }
 
 /**
@@ -183,28 +183,28 @@ async function getPreviousSession(playerId) {
  * const sessions = await getPlayerSessions("player-id")
  */
 async function getPlayerSessions(playerId) {
-	try {
-		const q = query(sessionsCollection, where("playerId", "==", playerId));
-		const querySnapshot = await getDocs(q);
-		if (querySnapshot.empty) throw new Error("No sessions found");
-		return querySnapshot.docs.map(function (doc) {
-			const session = doc.data();
+  try {
+    const q = query(sessionsCollection, where("playerId", "==", playerId));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) throw new Error("No sessions found");
+    return querySnapshot.docs.map(function (doc) {
+      const session = doc.data();
 
-			// parse the score from JSON string to array
-			session.scores && (session.scores = JSON.parse(session.scores));
+      // parse the score from JSON string to array
+      session.scores && (session.scores = JSON.parse(session.scores));
 
-			return { id: doc.id, ...session };
-		});
-	} catch (e) {
-		console.error("Error getting player sessions: ", e);
-		return null;
-	}
+      return { id: doc.id, ...session };
+    });
+  } catch (e) {
+    console.error("Error getting player sessions: ", e);
+    return null;
+  }
 }
 
 export {
-	createSession,
-	updateSession,
-	getSession,
-	getPreviousSession,
-	getPlayerSessions,
+  createSession,
+  updateSession,
+  getSession,
+  getPreviousSession,
+  getPlayerSessions,
 };
