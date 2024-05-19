@@ -25,11 +25,12 @@ class GameBackend {
     this.gameEndedAt = "";
   }
 
-  async registerPlayer(name, age) {
+  async registerPlayer(name, age, sex) {
     try {
       const userToRegister = {
         name: name,
         age: age,
+        gender: sex,
         badges: [],
       };
       return await createPlayer(userToRegister);
@@ -148,7 +149,7 @@ document
     event.preventDefault();
     player.name = document.getElementById("name").value;
     player.age = Number(document.getElementById("age").value);
-    
+
     if (document.getElementById("female").checked) player.sex = 0;
     else player.sex = 1;
 
@@ -159,7 +160,8 @@ document
     try {
       const returnedPlayer = await playerBackend.registerPlayer(
         player.name,
-        player.age
+        player.age,
+        player.sex
       );
       player.id = returnedPlayer.id;
 
@@ -311,7 +313,8 @@ const awardsDivOne = document.querySelector("main .badges.one .award-icons");
 const awardsDivTwo = document.querySelector("main .badges.two .award-icons");
 const alertDiv = document.querySelector(".alert");
 
-if (isIPadorTablet()) runAlert("Try landscape mode on iPads and Tablets!", 4000);   //no longer needed
+if (isIPadorTablet())
+  runAlert("Try landscape mode on iPads and Tablets!", 4000); //no longer needed
 
 // puts the letters and the level number and registers event listeners
 function loadLevel(level) {
@@ -454,7 +457,6 @@ function endLevel() {
 
   if (!player.badges.includes(state.level)) {
     if (state.score >= 75) {
-
       temp.style.cssText = "display: flex";
       endModal
         .querySelector(".award > img")
@@ -472,11 +474,12 @@ function endLevel() {
     } else temp.style.cssText = "display: none";
   } else temp.style.cssText = "display: none";
 
-
   if (state.score >= 75 && state.level < 5) {
     endModal.querySelector(".btns div > .next").removeAttribute("disabled");
   } else
-    endModal.querySelector(".btns div > .next").setAttribute("disabled", "true");
+    endModal
+      .querySelector(".btns div > .next")
+      .setAttribute("disabled", "true");
 
   endModal.addEventListener("close", handleClose);
 
@@ -555,7 +558,6 @@ loadLevel(levels.level1);
 // call off cleanup when the user tries to leave the page
 window.addEventListener("beforeunload", (event) => {
   // event.preventDefault(); // Cancel the event
-
   // Chrome requires returnValue to be set
   // event.returnValue = "Are you tired of playing?";
 });
