@@ -156,7 +156,7 @@ document
     // create player
 
     let testForFailure = false;
-    runAlert("Creating player...");
+    runAlert("Creating player...", 1000);
     try {
       const returnedPlayer = await playerBackend.registerPlayer(
         player.name,
@@ -202,13 +202,15 @@ document
       .querySelector(".intro-page form")
       .setAttribute("disabled", "disabled");
 
+    cleanBadgesArray(player.badges);
     document.querySelector(".intro-page").setAttribute("hidden", "hidden");
     document.querySelector(".game").removeAttribute("hidden");
-    
-    runAlert("Match the sign with the correct letter. Earn 75% points to win a badge and complete a level", 15000);
+
+    runAlert("Match the sign with the correct letter. Earn 75% points to win a badge and complete a level", 10000);
   });
 
 function showBadgesFetchedFromBackEnd() {
+  cleanBadgesArray(player.badges);
   for (let i = 0; i < player.badges.length; i++) {
     let div = document.createElement("div");
     div.style.cssText = `background-image: url(./badge${player.badges[i]}.png)`;
@@ -216,6 +218,18 @@ function showBadgesFetchedFromBackEnd() {
       awardsDivTwo.appendChild(div);
     } else {
       awardsDivOne.appendChild(div);
+    }
+  }
+}
+
+function cleanBadgesArray(array) {
+  for (let x = 0; x < array.length; x++) {
+    for (let y = x + 1; y < array.length;) {
+      if (array[y] == array[x]) {
+        array.splice(y, 1);
+        continue;
+      }
+      y++;
     }
   }
 }
@@ -569,6 +583,7 @@ window.addEventListener("beforeunload", (event) => {
 function runAlert(message, time = 3000) {
   alertDiv.querySelector(".text").textContent = message;
   alertDiv.classList.add("action");
+  alertDiv.style.animationDuration = `${time/1000}` + 's';
   setTimeout(() => {
     alertDiv.classList.remove("action");
   }, time);
