@@ -154,7 +154,7 @@ async function getPreviousSession(playerId) {
       sessionsCollection,
       where("playerId", "==", playerId),
       orderBy("gameStartedAt", "asc"),
-      limit(1)
+      limit(1),
     );
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) throw new Error("No previous session found");
