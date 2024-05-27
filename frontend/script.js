@@ -174,7 +174,7 @@ document
 
       try {
         await playerBackend.setLoginInfo();
-        runAlert("Player created successfully!");
+        // runAlert("Player created successfully!");
       } catch (e) {
         console.error(e);
         runAlert(
@@ -202,6 +202,8 @@ document
 
     document.querySelector(".intro-page").setAttribute("hidden", "hidden");
     document.querySelector(".game").removeAttribute("hidden");
+    
+    runAlert("Match the sign with the correct letter. Earn 75% points to win a badge and complete a level", 15000);
   });
 
 function showBadgesFetchedFromBackEnd() {
