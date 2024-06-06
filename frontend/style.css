@@ -354,13 +354,13 @@ form input {
 .fail-animation {
   box-sizing: border-box;
   background-color: red;
-  animation: fail 1s ease 0s infinite;
+  animation: fail 1s linear 0s infinite alternate;
 }
 
 .correct-animation {
   box-sizing: border-box;
   background-color: green;
-  animation: show-correct 1s ease 0s infinite;
+  animation: show-correct 1s linear 0s infinite alternate;
 }
 
 @keyframes fail {
@@ -386,7 +386,8 @@ form input {
 
   100% {
     transform: translateX(0px);
-    background-color: #f6e013;
+    background-color: red;
+    /* background-color: #f6e013; */
   }
 }
 
@@ -414,6 +415,7 @@ form input {
   100% {
     transform: translateY(0px);
     /* background-color: #F6E013; */
+    background-color: limegreen;
   }
 }
 

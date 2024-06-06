@@ -416,10 +416,13 @@ function updateScore() {
 }
 
 function runFailAnimation(div) {
+
+  let animDuration = 2000; //ms
+
   div.classList.add("fail-animation");
   setTimeout(() => {
     div.classList.remove("fail-animation");
-  }, 1000);
+  }, animDuration);
   let letter = vidDiv.getAttribute("data-val");
   let temp = document.querySelector(
     `.bottom .letters div[data-val='${letter}']`,
@@ -427,7 +430,7 @@ function runFailAnimation(div) {
   temp.classList.add("correct-animation");
   setTimeout(() => {
     temp.classList.remove("correct-animation");
-  }, 1000);
+  }, animDuration);
 }
 
 function updateProgressBars() {
